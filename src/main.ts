@@ -1,5 +1,5 @@
 import { type Datapack, loadDatapack } from "./datapack";
-import { DatapacksChangedEvent, datapackStore } from "./datapackStore";
+import { type DatapackStoreEvents, datapackStore } from "./datapackStore";
 
 const fileUploadElement = document.getElementById("input")!;
 fileUploadElement.addEventListener("change", onFileUploaded, { passive: true });
@@ -19,8 +19,8 @@ async function onFileUploaded(e: Event) {
 	datapackStore.add(validDatapacks);
 }
 
-function updateDatapackDisplay(event: Event) {
-	const { detail } = event as DatapacksChangedEvent;
+function updateDatapackDisplay(event: DatapackStoreEvents["datapacksChanged"]) {
+	const { detail } = event;
 	const dpDisplayElement = detail.map(createDatapackDisplayElement);
 
 	const datapackDisplay = document.getElementById("datapack-display")!;

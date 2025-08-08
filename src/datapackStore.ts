@@ -1,12 +1,17 @@
+import { TypedEventTarget } from "typescript-event-target";
 import { type Datapack } from "./datapack";
 
-export class DatapacksChangedEvent extends CustomEvent<ReadonlyArray<Datapack>> {
+class DatapacksChangedEvent extends CustomEvent<ReadonlyArray<Datapack>> {
 	constructor(datapacks: ReadonlyArray<Datapack>) {
 		super("datapacksChanged", { detail: datapacks });
 	}
 }
 
-class DatapackStore extends EventTarget {
+export interface DatapackStoreEvents {
+	datapacksChanged: DatapacksChangedEvent;
+}
+
+class DatapackStore extends TypedEventTarget<DatapackStoreEvents> {
 	private datapacks = new Map<string, Datapack>();
 
 	getAll(): ReadonlyArray<Datapack> {
@@ -39,7 +44,7 @@ class DatapackStore extends EventTarget {
 	}
 
 	private notifyChange() {
-		this.dispatchEvent(new DatapacksChangedEvent(this.getAll()));
+		this.dispatchTypedEvent("datapacksChanged", new DatapacksChangedEvent(this.getAll()));
 	}
 }
 
