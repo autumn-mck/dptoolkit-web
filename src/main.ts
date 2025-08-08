@@ -7,7 +7,8 @@ async function onFileUploaded(e: Event) {
 	const fileList = (e.target as HTMLInputElement).files;
 	if (!fileList) return;
 
-	const zipFiles = Array.from(fileList).filter((file) => file.type === "application/zip");
+	const acceptedTypes = ["application/zip", "application/java-archive"];
+	const zipFiles = Array.from(fileList).filter((file) => acceptedTypes.includes(file.type));
 	const datapacks = await Promise.all(zipFiles.map(loadDatapack));
 
 	console.log(datapacks);
