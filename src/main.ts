@@ -1,25 +1,32 @@
 import { type Datapack, loadDatapack } from "./datapack";
+import { DatapacksChangedEvent, datapackStore } from "./datapackStore";
 
 const fileUploadElement = document.getElementById("input")!;
 fileUploadElement.addEventListener("change", onFileUploaded, { passive: true });
+datapackStore.addEventListener("datapacksChanged", updateDatapackDisplay, { passive: true });
 
 async function onFileUploaded(e: Event) {
 	const fileList = (e.target as HTMLInputElement).files;
 	if (!fileList) return;
 
+	console.time("loadDatapacks");
 	const acceptedTypes = ["application/zip", "application/java-archive"];
 	const zipFiles = Array.from(fileList).filter((file) => acceptedTypes.includes(file.type));
 	const datapacks = await Promise.all(zipFiles.map(loadDatapack));
+	const validDatapacks = datapacks.filter((dp) => dp instanceof Object);
+	console.timeEnd("loadDatapacks");
 
-	console.log(datapacks);
+	datapackStore.add(validDatapacks);
+}
 
-	const dpDisplayElement = datapacks
-		.filter((dp) => dp instanceof Object)
-		.map(createDatapackDisplayElement);
+function updateDatapackDisplay(event: Event) {
+	const { detail } = event as DatapacksChangedEvent;
+	const dpDisplayElement = detail.map(createDatapackDisplayElement);
 
-	document.getElementById("datapack-display")!.innerHTML = "";
+	const datapackDisplay = document.getElementById("datapack-display")!;
+	datapackDisplay.innerHTML = "";
 	dpDisplayElement.forEach((element) => {
-		document.getElementById("datapack-display")!.appendChild(element);
+		datapackDisplay.appendChild(element);
 	});
 }
 

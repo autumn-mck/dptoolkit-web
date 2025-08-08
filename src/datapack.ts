@@ -48,7 +48,7 @@ export async function loadDatapack(file: File): Promise<Datapack | string> {
 	if (modules.has(Modules.DPCONFIG)) config = await loadDpConfig(zip);
 
 	return {
-		id: mcmeta.pack.id,
+		id: mcmeta.pack.id || file.name,
 		name: mcmeta.pack.name,
 		description: mcmeta.pack.description,
 		icon,
