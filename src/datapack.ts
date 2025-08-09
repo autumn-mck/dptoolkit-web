@@ -1,4 +1,5 @@
 import JSZip from "jszip";
+import { ConfigClass } from "./config";
 
 export interface Datapack {
 	id: string;
@@ -13,6 +14,7 @@ export interface Datapack {
 	mcmeta: Record<string, unknown>;
 	zip: JSZip;
 	config: unknown | undefined;
+	configObject: undefined | ConfigClass;
 	modules: Set<Module>;
 }
 
@@ -44,8 +46,10 @@ export async function loadDatapack(file: File): Promise<Datapack | string> {
 
 	const modules = detectModules(zip);
 
-	let config;
+	let config = {};
 	if (modules.has(Modules.DPCONFIG)) config = await loadDpConfig(zip);
+
+	let configObject = new ConfigClass(config);
 
 	return {
 		id: mcmeta.pack.id || file.name,
@@ -54,12 +58,13 @@ export async function loadDatapack(file: File): Promise<Datapack | string> {
 		icon,
 		mcmeta,
 		config,
+		configObject,
 		zip,
 		modules,
 	};
 }
 
-async function loadDpConfig(datapackZip: JSZip): Promise<unknown> {
+async function loadDpConfig(datapackZip: JSZip): Promise<Object> {
 	const dpConfigText = await datapackZip.file("dpconfig.json")?.async("string");
 	if (dpConfigText) return JSON.parse(dpConfigText);
 	else return {};
