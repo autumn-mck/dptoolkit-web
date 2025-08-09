@@ -83,7 +83,7 @@ a:visited {
 
 /* CONFIG WIDGETS AND STUFF */
 .widget {
-	border: 1px;
+	border: 0px;
 	border-color: var(--background-below);
 	border-style: solid;
 
