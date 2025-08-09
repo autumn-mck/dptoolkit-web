@@ -11,33 +11,41 @@
 	</head>
 
 	<body>
-		<h1>Datapack Toolkit Web (in development)</h1>
-		<input type="file" id="input" accept=".zip,.jar" multiple />
+		<h2>Datapack Toolkit Web (in development)</h2>
+		<div class="edit_area">
 
-		<div class="work_area">
-			<div id="datapack-display"></div>
+			<p>Select a datapack file...</p>
+			<input type="file" id="input" accept=".zip,.jar" multiple />
 
-			<template id="datapack-template">
-				<div class="datapack">
-					<img class="datapack-icon" height="100px"/>
-					<div class="datapack-name-and-description">
-						<h3 class="datapack-name"></h3>
-						<p class="datapack-description"></p>
+			<div class="work_area">
+				<div id="datapack-display"></div>
+
+				<template id="datapack-template">
+					<div class="datapack">
+						<img class="datapack-icon" height="100px"/>
+						<div class="datapack-name-and-description">
+							<h3 class="datapack-name"></h3>
+							<p class="datapack-description"></p>
+						</div>
 					</div>
-				</div>
-			</template>
+				</template>
 
-			<div class="config-screen">
-				<p>
-					No config loaded
-				</p>
+				<div class="config-screen">
+					<p>
+						No config loaded
+					</p>
+				</div>
+
+				<script type="module" src="/src/main.ts"></script>
 			</div>
 
-			<script type="module" src="/src/main.ts"></script>
+
 		</div>
 
-
-
-
 	</body>
+	<footer>
+		<p>
+			See the source: <a href="https://github.com/autumn-mck/dptoolkit-web">https://github.com/autumn-mck/dptoolkit-web</a>
+		</p>
+	</footer>
 </html>

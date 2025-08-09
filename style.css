@@ -4,20 +4,22 @@ html {
 	background-color: #11111b;
 }
 body {
-	background-color: #181825;
-	margin: 5em;
-	margin-top: 2.5em;
-	padding: 1em;
-	border: 2px;
-	border-color: #11111b;
-	border-style: solid;
 
 }
+
+a:link {
+	color: #cba6f7;
+}
+a:visited {
+	color: #dec7fa;
+}
+
+.edit_area {
+	background-color: #181825;
+	padding: 1em;
+}
 .work_area {
-	padding: 2em;
-	padding-top: 0.5em;
 	margin-top: 1em;
-	
 	display: flex;
 	align-items: stretch;
 }
