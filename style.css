@@ -4,6 +4,14 @@
 	--background: #181825;
 	--background-below: #11111b;
 	--background-above: #1e1e2e;
+
+	--border-width: 2px;
+}
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
 }
 
 html {
@@ -19,23 +27,76 @@ a:visited {
 	color: #dec7fa;
 }
 
+.file {
+	/* custom file input modified from https://github.com/mdo/wtf-forms/ */
+	position: relative;
+	display: inline-block;
+	cursor: pointer;
+	height: 3rem;
+
+	input {
+		min-width: 14rem;
+		margin: 0;
+		filter: opacity(0);
+		opacity: 0;
+	}
+
+	.file-custom {
+		position: absolute;
+		top: 0;
+		right: 0;
+		left: 0;
+		z-index: 5;
+		height: 3rem;
+		padding: 0.75rem 1.25rem;
+		line-height: 1.5;
+		background-color: var(--background);
+		border: var(--border-width) solid var(--background-below);
+		user-select: none;
+	}
+
+	.file-custom::before {
+		position: absolute;
+		top: calc(-1 * var(--border-width));
+		right: calc(-1 * var(--border-width));
+		bottom: calc(-1 * var(--border-width));
+		z-index: 6;
+		display: block;
+		content: "Browse";
+		height: 3rem;
+		padding: 0.75rem 1.25rem;
+		line-height: 1.5;
+		background-color: var(--background-above);
+		border: var(--border-width) solid var(--background-below);
+	}
+
+	.file-custom::after {
+		content: "Add datapack(s)...";
+	}
+}
+
 .edit_area {
 	background-color: var(--background);
 	padding: 1em;
 }
 
 .work_area {
-	margin-top: 1em;
 	display: flex;
 	gap: 1em;
 	align-items: stretch;
 }
 
+#left-col {
+	display: flex;
+	flex-direction: column;
+	gap: 1em;
+	min-width: 25%;
+	height: 100%;
+}
+
 #datapack-display {
 	background-color: var(--background-above);
-	border: 2px var(--background-below) solid;
-
-	min-width: 25%;
+	border: var(--border-width) var(--background-below) solid;
 
 	padding: 1em;
 
@@ -73,10 +134,7 @@ a:visited {
 
 .config-screen {
 	background-color: var(--background-above);
-	border: 2px;
-	border-color: var(--background-below);
-	border-style: solid;
-
+	border: var(--border-width) solid var(--background-below);
 	width: 100%;
 	padding: 1em;
 }

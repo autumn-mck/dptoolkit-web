@@ -13,11 +13,19 @@
 	<body>
 		<h2>Datapack Toolkit Web (in development)</h2>
 		<div class="edit_area">
-			<p>Select a datapack file...</p>
-			<input type="file" id="input" accept=".zip,.jar" multiple />
-
 			<div class="work_area">
-				<div id="datapack-display"></div>
+				<div id="left-col">
+					<label class="file">
+						<input
+							type="file"
+							id="input"
+							accept=".zip,.jar"
+							aria-label="Upload a datapack file"
+							multiple />
+						<span class="file-custom"></span>
+					</label>
+					<div id="datapack-display"></div>
+				</div>
 
 				<template id="datapack-template">
 					<div class="datapack">
@@ -41,13 +49,13 @@
 							<h3 class="widget-text">A heading widget...</h3>
 						</div>
 					</template>
-					
+
 					<template id="image-widget-template">
 						<div class="widget image-widget">
 							<p class="widget-text">⚠ Image widgets are not supported</p>
 						</div>
 					</template>
-					
+
 					<template id="slider-widget-template">
 						<div class="widget slider-widget">
 							<label class="widget-text">A slider</label>
@@ -57,22 +65,21 @@
 								max="100"
 								value="50"
 								class="widget-input widget-range-input"
-								id="widget-input-x"
-								/>
+								id="widget-input-x" />
 						</div>
 					</template>
-					
+
 					<template id="switch-widget-template">
 						<div class="widget switch-widget">
 							<label class="widget-text">A switch</label>
-							<input type="checkbox" class="widget-input widget-switch-input" id="widget-input-x"/>
+							<input type="checkbox" class="widget-input widget-switch-input" id="widget-input-x" />
 						</div>
 					</template>
-					
+
 					<template id="number-widget-template">
 						<div class="widget number-widget">
 							<label class="widget-text">A number box</label>
-							<input type="number" class="widget-input widget-number-input" id="widget-input-x"/>
+							<input type="number" class="widget-input widget-number-input" id="widget-input-x" />
 						</div>
 					</template>
 				</form>
