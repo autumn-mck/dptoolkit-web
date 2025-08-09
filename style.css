@@ -116,12 +116,12 @@ a:visited {
 	}
 
 	.name {
-		margin-bottom: 0.5em;
+		margin: 0;
 	}
 
 	.description {
 		color: rgb(214, 214, 214);
-		margin-top: 0.5em;
+		margin: 0;
 	}
 
 	.name-and-description {
@@ -129,6 +129,10 @@ a:visited {
 		align-items: stretch;
 		align-content: center;
 		justify-content: center;
+
+		display: flex;
+		flex-direction: column;
+		gap: 0.5em;
 	}
 }
 
