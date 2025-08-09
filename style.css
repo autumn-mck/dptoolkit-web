@@ -1,0 +1,23 @@
+html {
+	font-family: sans-serif;
+	color: whitesmoke;
+	background-color: #181825;
+}
+body {
+	margin: 5em;
+	margin-top: 2.5em;
+	padding: 1em;
+	border: 2px;
+	border-color: #11111b;
+	border-style: solid;
+
+}
+.work_area {
+	padding: 2em;
+	padding-top: 0.5em;
+	margin-top: 1em;
+	background-color: #1e1e2e;
+	border: 2px;
+	border-color: #11111b;
+	border-style: solid;
+}

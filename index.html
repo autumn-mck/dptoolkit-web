@@ -7,21 +7,25 @@
 
 		<title>Datapack Toolkit</title>
 		<meta name="description" content="datapack toolkit :3" />
+		<link rel="stylesheet" href="style.css">
 	</head>
 
 	<body>
+		<h1>Datapack Toolkit Web (in development)</h1>
 		<input type="file" id="input" accept=".zip,.jar" multiple />
 
-		<div id="datapack-display"></div>
+		<div class="work_area">
+			<div id="datapack-display"></div>
 
-		<template id="datapack-template">
-			<div class="datapack">
-				<h2 class="datapack-name"></h2>
-				<p class="datapack-description"></p>
-				<img class="datapack-icon" />
-			</div>
-		</template>
+			<template id="datapack-template">
+				<div class="datapack">
+					<h2 class="datapack-name"></h2>
+					<p class="datapack-description"></p>
+					<img class="datapack-icon" />
+				</div>
+			</template>
 
-		<script type="module" src="/src/main.ts"></script>
+			<script type="module" src="/src/main.ts"></script>
+		</div>
 	</body>
 </html>
