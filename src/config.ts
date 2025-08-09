@@ -75,8 +75,8 @@ export class ConfigClass {
 			}
 			else if (type == "slider" || type == "number" || type == "value") {
 				(clone.querySelector(".widget-switch-input") as HTMLInputElement).valueAsNumber = element.value.default;
-				if (element.value.range[0]) (clone.querySelector(".widget-switch-input") as HTMLInputElement).min = element.value.range[0].toString();
-				if (element.value.range[1]) (clone.querySelector(".widget-switch-input") as HTMLInputElement).max = element.value.range[1].toString();
+				if (element.value.range) (clone.querySelector(".widget-switch-input") as HTMLInputElement).min = element.value.range[0].toString();
+				if (element.value.range) (clone.querySelector(".widget-switch-input") as HTMLInputElement).max = element.value.range[1].toString();
 			}
 
 			(clone.querySelector(".widget-switch-input") as HTMLInputElement).id = "input-widget-" + i.toString();

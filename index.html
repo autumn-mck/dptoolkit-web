@@ -29,42 +29,52 @@
 					</div>
 				</template>
 
-				<div class="config-screen">
-					<p>No config loaded</p>
+				<form class="config-screen" id="config-screen">
+					<template id="text-widget-template">
+						<div class="widget text-widget">
+							<p>A text widget...</p>
+						</div>
+					</template>
 
-					<div class="widget text-widget">
-						<p>A text widget...</p>
-					</div>
-
-					<div class="widget title-widget">
-						<h3>A heading widget...</h3>
-					</div>
-
-					<div class="widget image-widget">
-						<p>⚠ Image widgets are not supported</p>
-					</div>
-
-					<div class="widget slider-widget">
-						<p>A slider</p>
-						<input
-							type="range"
-							min="1"
-							max="100"
-							value="50"
-							class="widget-input widget-range-input"
-							id="myRange" />
-					</div>
-
-					<div class="widget switch-widget">
-						<p>A switch</p>
-						<input type="checkbox" class="widget-input widget-switch-input" />
-					</div>
-
-					<div class="widget number-widget">
-						<p>A number box</p>
-						<input type="number" class="widget-input widget-number-input" />
-					</div>
-				</div>
+					<template id="title-widget-template">
+						<div class="widget title-widget">
+							<h3>A heading widget...</h3>
+						</div>
+					</template>
+					
+					<template id="image-widget-template">
+						<div class="widget image-widget">
+							<p>⚠ Image widgets are not supported</p>
+						</div>
+					</template>
+					
+					<template id="slider-widget-template">
+						<div class="widget slider-widget">
+							<label>A slider</label>
+							<input
+								type="range"
+								min="1"
+								max="100"
+								value="50"
+								class="widget-input widget-range-input"
+								/>
+						</div>
+					</template>
+					
+					<template id="switch-widget-template">
+						<div class="widget switch-widget">
+							<label>A switch</label>
+							<input type="checkbox" class="widget-input widget-switch-input" />
+						</div>
+					</template>
+					
+					<template id="number-widget-template">
+						<div class="widget number-widget">
+							<label>A number box</label>
+							<input type="number" class="widget-input widget-number-input" />
+						</div>
+					</template>
+				</form>
 
 				<script type="module" src="/src/main.ts"></script>
 			</div>
