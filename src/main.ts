@@ -8,13 +8,14 @@ datapackStore.addEventListener("datapacksChanged", updateDatapackDisplay, { pass
 async function onFileUploaded(e: Event) {
 	const fileList = (e.target as HTMLInputElement).files;
 	if (!fileList) return;
-
 	console.time("loadDatapacks");
-	const acceptedTypes = ["application/zip", "application/java-archive"];
+	const acceptedTypes = ["application/zip", "application/java-archive", "application/x-zip-compressed"];
+	console.log("Files detected: "); console.log(fileList);
 	const zipFiles = Array.from(fileList).filter((file) => acceptedTypes.includes(file.type));
 	const datapacks = await Promise.all(zipFiles.map(loadDatapack));
 	const validDatapacks = datapacks.filter((dp) => dp instanceof Object);
 	console.timeEnd("loadDatapacks");
+	console.log(validDatapacks);
 
 	datapackStore.add(validDatapacks);
 }
