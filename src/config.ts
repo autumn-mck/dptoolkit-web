@@ -5,10 +5,7 @@ interface WidgetDefinition {
 	value: {
 		type: string;
 		default: number;
-		range: [
-			number,
-			number
-		];
+		range: [number, number];
 	};
 }
 
@@ -17,48 +14,35 @@ interface ConfigDefinition {
 	widgets: Array<WidgetDefinition>;
 }
 
+const typeTemplateMap: { [key: string]: string } = {
+	text: "text-widget-template",
+	title: "title-widget-template",
+	image: "image-widget-template",
+	slider: "slider-widget-template",
+	switch: "switch-widget-template",
+	number: "number-widget-template",
+};
 
 export class ConfigClass {
-	file: {config: ConfigDefinition};
+	file: { config: ConfigDefinition };
 	widgets: Array<WidgetDefinition> = [];
 
 	constructor(config_object: object) {
-		this.file = config_object as {config: ConfigDefinition};
+		this.file = config_object as { config: ConfigDefinition };
 		this.widgets = this.file.config.widgets;
 	}
 
 	public get_widgets_html() {
 		let html_widgets: Array<DocumentFragment> = [];
-		
+
 		let i = 0;
-		this.widgets.forEach(element => {
+		this.widgets.forEach((element) => {
 			const type = element.type;
 
-			let template = document.getElementById("text-widget-template") as HTMLTemplateElement;
-
-			// Get correct template
-			switch (type) {
-				case "heading":
-					template = document.getElementById("title-widget-template") as HTMLTemplateElement;
-					break;
-				case "title":
-					template = document.getElementById("title-widget-template") as HTMLTemplateElement;
-					break;
-				case "text":
-					template = document.getElementById("text-widget-template") as HTMLTemplateElement;
-					break;
-				case "image":
-					template = document.getElementById("image-widget-template") as HTMLTemplateElement;
-					break;
-				case "switch":
-					template = document.getElementById("switch-widget-template") as HTMLTemplateElement;
-					break;
-				case "number":
-					template = document.getElementById("number-widget-template") as HTMLTemplateElement;
-					break;
-				case "slider":
-					template = document.getElementById("slider-widget-template") as HTMLTemplateElement;
-					break;
+			let template = document.getElementById(typeTemplateMap[type]) as HTMLTemplateElement | null;
+			if (!template) {
+				console.error(`Template not found for type: ${type}`);
+				template = document.getElementById("text-widget-template") as HTMLTemplateElement;
 			}
 
 			// Create the thing
@@ -72,11 +56,15 @@ export class ConfigClass {
 				// else if (element.default == "enabled") {
 				// 	(clone.querySelector(".widget-switch-input") as HTMLInputElement).checked = true;
 				// }
-			}
-			else if (type == "slider" || type == "number" || type == "value") {
-				(clone.querySelector(".widget-input") as HTMLInputElement).valueAsNumber = element.value.default;
-				if (element.value.range) (clone.querySelector(".widget-input") as HTMLInputElement).min = element.value.range[0].toString();
-				if (element.value.range) (clone.querySelector(".widget-input") as HTMLInputElement).max = element.value.range[1].toString();
+			} else if (type == "slider" || type == "number" || type == "value") {
+				(clone.querySelector(".widget-input") as HTMLInputElement).valueAsNumber =
+					element.value.default;
+				if (element.value.range)
+					(clone.querySelector(".widget-input") as HTMLInputElement).min =
+						element.value.range[0].toString();
+				if (element.value.range)
+					(clone.querySelector(".widget-input") as HTMLInputElement).max =
+						element.value.range[1].toString();
 
 				if (element.value.type) {
 					if (element.value.type == "percent") {
@@ -87,11 +75,13 @@ export class ConfigClass {
 
 			// Set input ID
 			if (type != "text" && type != "image" && type != "title" && type != "heading") {
-				(clone.querySelector(".widget-input") as HTMLInputElement).id = "widget-input-" + i.toString();
+				(clone.querySelector(".widget-input") as HTMLInputElement).id =
+					"widget-input-" + i.toString();
 			}
-			
+
 			// Push to array
-			html_widgets.push(clone); i += 1;
+			html_widgets.push(clone);
+			i += 1;
 		});
 
 		// Return array of HTML elements
