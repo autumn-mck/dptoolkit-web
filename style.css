@@ -1,5 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Mozilla+Text:wght@200..700&display=swap');
+
 html {
-	font-family: sans-serif;
+	font-family: "Mozilla Text", sans-serif;
 	color: whitesmoke;
 	background-color: #11111b;
 }
