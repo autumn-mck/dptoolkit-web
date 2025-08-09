@@ -10,8 +10,13 @@ async function onFileUploaded(e: Event) {
 	const fileList = (e.target as HTMLInputElement).files;
 	if (!fileList) return;
 	console.time("loadDatapacks");
-	const acceptedTypes = ["application/zip", "application/java-archive", "application/x-zip-compressed"];
-	console.log("Files detected: "); console.log(fileList);
+	const acceptedTypes = [
+		"application/zip",
+		"application/java-archive",
+		"application/x-zip-compressed",
+	];
+	console.log("Files detected: ");
+	console.log(fileList);
 	const zipFiles = Array.from(fileList).filter((file) => acceptedTypes.includes(file.type));
 	if (zipFiles.length == 0) {
 		window.alert("Couldn't load datapack archive, archive may not be a datapack.");
@@ -41,12 +46,13 @@ function createDatapackDisplayElement(dp: Datapack): DocumentFragment {
 	const template = document.getElementById("datapack-template") as HTMLTemplateElement;
 	const clone = template.content.cloneNode(true) as DocumentFragment;
 
-	(clone.querySelector(".datapack-name") as HTMLElement).innerText = dp.name;
-	(clone.querySelector(".datapack-description") as HTMLElement).innerText =
-		descriptionToDisplayable(dp.description);
+	(clone.querySelector(".name") as HTMLElement).innerText = dp.name;
+	(clone.querySelector(".description") as HTMLElement).innerText = descriptionToDisplayable(
+		dp.description
+	);
 
 	if (dp.icon) {
-		(clone.querySelector(".datapack-icon") as HTMLImageElement).src = URL.createObjectURL(dp.icon);
+		(clone.querySelector("img") as HTMLImageElement).src = URL.createObjectURL(dp.icon);
 	}
 
 	return clone;
