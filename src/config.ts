@@ -12,9 +12,10 @@ export class ConfigClass {
 		this.widgets = this.file.config.widgets;
 	}
 
-	public get_widgets() {
+	public get_widgets_html() {
 		let html_widgets: Array<DocumentFragment> = [];
-
+		
+		let i = 0;
 		this.widgets.forEach(element => {
 			const type = element.type;
 
@@ -58,8 +59,8 @@ export class ConfigClass {
 				}
 			}
 
-			html_widgets.push(clone);
-
+			(clone.querySelector(".widget-switch-input") as HTMLInputElement).id = "input-widget-" + i.toString();
+			html_widgets.push(clone); i += 1;
 		});
 
 		// Return array of HTML elements
