@@ -33,17 +33,18 @@ export class ConfigClass {
 	}
 
 	public get_widgets_html() {
-		let html_widgets: Array<DocumentFragment> = [];
+		let html_widgets: DocumentFragment[] = [];
 
 		let i = 0;
 		this.widgets.forEach((element) => {
 			const type = element.type;
 
-			let template = document.getElementById(typeTemplateMap[type]) as HTMLTemplateElement | null;
-			if (!template) {
-				console.error(`Template not found for type: ${type}`);
-				template = document.getElementById("text-widget-template") as HTMLTemplateElement;
+			if (!(type in typeTemplateMap)) {
+				console.error("No template found for type", type);
+				return;
 			}
+
+			let template = document.getElementById(typeTemplateMap[type]) as HTMLTemplateElement;
 
 			// Create the thing
 			let clone = template.content.cloneNode(true) as DocumentFragment;
