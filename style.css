@@ -68,6 +68,7 @@ a:visited {
 	padding: 1em;
 }
 
+/* CONFIG WIDGETS AND STUFF */
 .widget {
 	border: 1px;
 	border-color: #11111b;
@@ -76,14 +77,25 @@ a:visited {
 	display: flex;
 	justify-content: space-between;
 	justify-items: stretch;
+
+	padding-left: 1em;
+	padding-right: 1em;
+
+	accent-color: #cba6f7;
 }
 .widget + .widget {
 	margin-top: 0.5em;
 }
-
 .widget-text {
-	min-width: 50%;
+	min-width: 25%;
 }
 .widget-input {
 	min-width: 25%;
+}
+.widget-number-input {
+	background-color: #181825;
+	border-color: #11111b;
+	border: 1px;
+	color: inherit;
+	font-family: inherit;
 }
