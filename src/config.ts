@@ -65,21 +65,32 @@ export class ConfigClass {
 			let clone = template.content.cloneNode(true) as DocumentFragment;
 			(clone.querySelector(".widget-text") as HTMLElement).innerText = element.text;
 
-			// if (type == "switch") {
-			// 	if (element.default == "disabled") {
-			// 		(clone.querySelector(".widget-switch-input") as HTMLInputElement).checked = false;
-			// 	}
-			// 	else if (element.default == "enabled") {
-			// 		(clone.querySelector(".widget-switch-input") as HTMLInputElement).checked = true;
-			// 	}
-			// 	(clone.querySelector(".widget-switch-input") as HTMLInputElement).id = "input-widget-" + i.toString();
-			// }
-			// else if (type == "slider" || type == "number" || type == "value") {
-			// 	(clone.querySelector(".widget-switch-input") as HTMLInputElement).valueAsNumber = element.value.default;
-			// 	if (element.value.range) (clone.querySelector(".widget-switch-input") as HTMLInputElement).min = element.value.range[0].toString();
-			// 	if (element.value.range) (clone.querySelector(".widget-switch-input") as HTMLInputElement).max = element.value.range[1].toString();
-			// }
+			if (type == "switch") {
+				// if (element.default == "disabled") {
+				// 	(clone.querySelector(".widget-switch-input") as HTMLInputElement).checked = false;
+				// }
+				// else if (element.default == "enabled") {
+				// 	(clone.querySelector(".widget-switch-input") as HTMLInputElement).checked = true;
+				// }
+			}
+			else if (type == "slider" || type == "number" || type == "value") {
+				(clone.querySelector(".widget-input") as HTMLInputElement).valueAsNumber = element.value.default;
+				if (element.value.range) (clone.querySelector(".widget-input") as HTMLInputElement).min = element.value.range[0].toString();
+				if (element.value.range) (clone.querySelector(".widget-input") as HTMLInputElement).max = element.value.range[1].toString();
+
+				if (element.value.type) {
+					if (element.value.type == "percent") {
+						(clone.querySelector(".widget-text") as HTMLElement).innerText += " (%)";
+					}
+				}
+			}
+
+			// Set input ID
+			if (type != "text" && type != "image" && type != "title" && type != "heading") {
+				(clone.querySelector(".widget-input") as HTMLInputElement).id = "widget-input-" + i.toString();
+			}
 			
+			// Push to array
 			html_widgets.push(clone); i += 1;
 		});
 
