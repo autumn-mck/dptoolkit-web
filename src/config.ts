@@ -24,12 +24,12 @@ const typeTemplateMap: { [key: string]: string } = {
 };
 
 export class ConfigClass {
-	file: { config: ConfigDefinition };
+	file: { config?: ConfigDefinition };
 	widgets: Array<WidgetDefinition> = [];
 
 	constructor(config_object: object) {
 		this.file = config_object as { config: ConfigDefinition };
-		this.widgets = this.file.config.widgets;
+		this.widgets = this.file.config?.widgets || [];
 	}
 
 	public get_widgets_html() {
