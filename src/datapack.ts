@@ -51,6 +51,8 @@ export async function loadDatapack(file: File): Promise<Datapack | string> {
 
 	let configObject = new ConfigClass(config);
 
+	writeConfigWidgetsToDocument(configObject);
+
 	return {
 		id: mcmeta.pack.id || file.name,
 		name: mcmeta.pack.name,
@@ -87,4 +89,12 @@ function detectModules(datapackZip: JSZip): Set<Module> {
 	});
 
 	return modules;
+}
+
+function writeConfigWidgetsToDocument(configObject: ConfigClass) {
+	const widgets: Array<DocumentFragment> = configObject.get_widgets_html();
+	const screen = document.getElementById("config-screen")!;
+	widgets.forEach(element => {
+		screen.appendChild(element);
+	});
 }
