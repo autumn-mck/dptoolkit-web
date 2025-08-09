@@ -3,7 +3,7 @@ import { ConfigClass } from "./config";
 
 export interface Datapack {
 	id: string;
-	name: string;
+	name: string | undefined;
 	description:
 		| string
 		| {
@@ -94,7 +94,7 @@ function detectModules(datapackZip: JSZip): Set<Module> {
 function writeConfigWidgetsToDocument(configObject: ConfigClass) {
 	const widgets: Array<DocumentFragment> = configObject.get_widgets_html();
 	const screen = document.getElementById("config-screen")!;
-	widgets.forEach(element => {
+	widgets.forEach((element) => {
 		screen.appendChild(element);
 	});
 }

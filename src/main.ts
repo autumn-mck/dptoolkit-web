@@ -46,10 +46,10 @@ function createDatapackDisplayElement(dp: Datapack): DocumentFragment {
 	const template = document.getElementById("datapack-template") as HTMLTemplateElement;
 	const clone = template.content.cloneNode(true) as DocumentFragment;
 
-	(clone.querySelector(".name") as HTMLElement).innerText = dp.name;
-	(clone.querySelector(".description") as HTMLElement).innerText = descriptionToDisplayable(
-		dp.description
-	);
+	const { name, description } = getNameDesc(dp.mcmeta);
+
+	(clone.querySelector(".name") as HTMLElement).innerHTML = name;
+	(clone.querySelector(".description") as HTMLElement).innerHTML = description;
 
 	if (dp.icon) {
 		(clone.querySelector("img") as HTMLImageElement).src = URL.createObjectURL(dp.icon);
@@ -58,7 +58,37 @@ function createDatapackDisplayElement(dp: Datapack): DocumentFragment {
 	return clone;
 }
 
+function getNameDesc(mcmeta: any): { name: string; description: string } {
+	let name = mcmeta.pack.name;
+	let description = descriptionToDisplayable(mcmeta.pack.description);
+
+	if (!name) {
+		const splitDescription = description.split("\n");
+		name = splitDescription[0];
+		description = splitDescription.slice(1).join("\n");
+	} else {
+		name = sanitizeHtml(name);
+	}
+
+	if (!description) {
+		description = "No description available";
+	}
+
+	return { name, description };
+}
+
 function descriptionToDisplayable(description: Datapack["description"]): string {
-	if (Array.isArray(description)) return description.map((desc) => desc.text).join("");
+	console.log(description);
+	if (Array.isArray(description))
+		return description
+			.map((desc) => ({ text: sanitizeHtml(desc.text), color: desc.color }))
+			.map((desc) => `<span style="color: ${desc.color}">${desc.text}</span>`)
+			.join("");
 	else return description;
+}
+
+function sanitizeHtml(unsafe: string): string {
+	const div = document.createElement("div");
+	div.innerText = unsafe;
+	return div.innerHTML;
 }
