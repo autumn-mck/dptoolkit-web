@@ -1,0 +1,101 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+html {
+	font-family: "Inter", sans-serif;
+	color: whitesmoke;
+	background-color: #11111b;
+}
+
+a:link {
+	color: #cba6f7;
+}
+a:visited {
+	color: #dec7fa;
+}
+
+.edit_area {
+	background-color: #181825;
+	padding: 1em;
+}
+.work_area {
+	margin-top: 1em;
+	display: flex;
+	align-items: stretch;
+}
+#datapack-display {
+	background-color: #1e1e2e;
+	border: 2px;
+	border-color: #11111b;
+	border-style: solid;
+
+	min-width: 25%;
+
+	padding: 1em;
+	margin-right: 1em;
+}
+.datapack {
+	display: flex;
+	align-items: center;
+	justify-content: left;
+	justify-items: auto;
+}
+.datapack + .datapack {
+	margin-top: 1em;
+}
+.datapack-name-and-description {
+	padding-left: 1em;
+	align-items: stretch;
+	align-content: center;
+	justify-content: center;
+}
+.datapack-icon {
+	border-radius: 0.5em;
+}
+.datapack-description {
+	color: rgb(214, 214, 214);
+	margin-top: 0.5em;
+}
+.datapack-name {
+	margin-bottom: 0.5em;
+}
+.config-screen {
+	background-color: #1e1e2e;
+	border: 2px;
+	border-color: #11111b;
+	border-style: solid;
+
+	width: 100%;
+	padding: 1em;
+}
+
+/* CONFIG WIDGETS AND STUFF */
+.widget {
+	border: 1px;
+	border-color: #11111b;
+	border-style: solid;
+
+	display: flex;
+	justify-content: space-between;
+	justify-items: stretch;
+
+	padding-left: 1em;
+	padding-right: 1em;
+
+	accent-color: #cba6f7;
+}
+.widget + .widget {
+	margin-top: 0.5em;
+}
+.widget-text {
+	min-width: 25%;
+}
+.widget-input {
+	min-width: 25%;
+}
+.widget-number-input {
+	background-color: #181825;
+	border-color: #11111b;
+	border: 1px;
+	color: inherit;
+	font-family: inherit;
+}

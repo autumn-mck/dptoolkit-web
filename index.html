@@ -4,24 +4,88 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<meta http-equiv="X-Clacks-Overhead" content="GNU Terry Pratchett" />
-
-		<title>Datapack Toolkit</title>
 		<meta name="description" content="datapack toolkit :3" />
+		<link rel="stylesheet" href="style.css">
+		<title>Datapack Toolkit Web</title>
 	</head>
 
 	<body>
-		<input type="file" id="input" accept=".zip,.jar" multiple />
+		<h2>Datapack Toolkit Web (in development)</h2>
+		<div class="edit_area">
 
-		<div id="datapack-display"></div>
+			<p>Select a datapack file...</p>
+			<input type="file" id="input" accept=".zip,.jar" multiple />
 
-		<template id="datapack-template">
-			<div class="datapack">
-				<h2 class="datapack-name"></h2>
-				<p class="datapack-description"></p>
-				<img class="datapack-icon" />
+			<div class="work_area">
+				<div id="datapack-display"></div>
+
+				<template id="datapack-template">
+					<div class="datapack">
+						<img class="datapack-icon" height="100px"/>
+						<div class="datapack-name-and-description">
+							<h3 class="datapack-name"></h3>
+							<p class="datapack-description"></p>
+						</div>
+					</div>
+				</template>
+
+				<div class="config-screen">
+					<p>
+						No config loaded
+					</p>
+
+					<div class="widget text-widget">
+						<p class="widget-text">
+							A text widget...
+						</p>
+					</div>
+
+					<div class="widget title-widget">
+						<h3 class="widget-text">
+							A heading widget...
+						</h3>
+					</div>
+
+					<div class="widget image-widget">
+						<p>⚠ Image widgets are not supported</p>
+					</div>
+
+					<div class="widget slider-widget">
+						<p class="widget-text">
+							A slider
+						</p>
+						<input type="range" min="1" max="100" value="50" class="widget-input widget-range-input" id="myRange">
+					</div>
+
+					<div class="widget switch-widget">
+						<p class="widget-text">
+							A switch
+						</p>
+						<input type="checkbox" class="widget-input widget-switch-input">
+					</div>
+
+					<div class="widget number-widget">
+						<p class="widget-text">
+							A number box
+						</p>
+						<input type="number" class="widget-input widget-number-input">
+					</div>
+
+				</div>
+
+				<script type="module" src="/src/main.ts"></script>
 			</div>
-		</template>
 
-		<script type="module" src="/src/main.ts"></script>
+
+		</div>
+
 	</body>
+	<footer>
+		<p>
+			Developed by Autumn and Bee
+			∗ Read the <a href="https://github.com/autumn-mck/dptoolkit-web">source code</a>
+			∗ Report issues <a href="https://github.com/autumn-mck/dptoolkit-web/issues">here</a>
+			∗ Join the <a href="https://everloste.github.io/discord">Discord server</a> for other things
+		</p>
+	</footer>
 </html>
