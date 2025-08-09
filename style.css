@@ -1,9 +1,10 @@
 html {
 	font-family: sans-serif;
 	color: whitesmoke;
-	background-color: #181825;
+	background-color: #11111b;
 }
 body {
+	background-color: #181825;
 	margin: 5em;
 	margin-top: 2.5em;
 	padding: 1em;
@@ -16,8 +17,52 @@ body {
 	padding: 2em;
 	padding-top: 0.5em;
 	margin-top: 1em;
+	
+	display: flex;
+	align-items: stretch;
+}
+#datapack-display {
 	background-color: #1e1e2e;
 	border: 2px;
 	border-color: #11111b;
 	border-style: solid;
+
+	min-width: 25%;
+
+	padding: 1em;
+	margin-right: 1em;
+}
+.datapack {
+	display: flex;
+	align-items: center;
+	justify-content: left;
+	justify-items: auto;
+}
+.datapack + .datapack {
+	margin-top: 1em;
+}
+.datapack-name-and-description {
+	padding-left: 1em;
+	align-items: stretch;
+	align-content: center;
+	justify-content: center;
+}
+.datapack-icon {
+	border-radius: 0.5em;
+}
+.datapack-description {
+	color: rgb(214, 214, 214);
+	margin-top: 0.5em;
+}
+.datapack-name {
+	margin-bottom: 0.5em;
+}
+.config-screen {
+	background-color: #1e1e2e;
+	border: 2px;
+	border-color: #11111b;
+	border-style: solid;
+
+	width: 100%;
+	padding: 1em;
 }
