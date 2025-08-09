@@ -2,6 +2,14 @@ interface WidgetDefinition {
 	type: string;
 	text: string;
 	default: string | undefined;
+	value: {
+		type: string;
+		default: number;
+		range: [
+			number,
+			number
+		];
+	};
 }
 
 interface ConfigDefinition {
@@ -64,6 +72,11 @@ export class ConfigClass {
 				else if (element.default == "enabled") {
 					(clone.querySelector(".widget-switch-input") as HTMLInputElement).checked = true;
 				}
+			}
+			else if (type == "slider" || type == "number" || type == "value") {
+				(clone.querySelector(".widget-switch-input") as HTMLInputElement).valueAsNumber = element.value.default;
+				if (element.value.range[0]) (clone.querySelector(".widget-switch-input") as HTMLInputElement).min = element.value.range[0].toString();
+				if (element.value.range[1]) (clone.querySelector(".widget-switch-input") as HTMLInputElement).max = element.value.range[1].toString();
 			}
 
 			(clone.querySelector(".widget-switch-input") as HTMLInputElement).id = "input-widget-" + i.toString();
