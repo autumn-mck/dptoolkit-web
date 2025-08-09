@@ -1,5 +1,6 @@
 import { type Datapack, loadDatapack } from "./datapack";
 import { type DatapackStoreEvents, datapackStore } from "./datapackStore";
+import { getStructureSets } from "./structureSet";
 
 const fileUploadElement = document.getElementById("input")!;
 fileUploadElement.addEventListener("change", onFileUploaded, { passive: true });
@@ -16,6 +17,8 @@ async function onFileUploaded(e: Event) {
 	const validDatapacks = datapacks.filter((dp) => dp instanceof Object);
 	console.timeEnd("loadDatapacks");
 	console.log(validDatapacks);
+
+	getStructureSets(validDatapacks);
 
 	datapackStore.add(validDatapacks);
 }

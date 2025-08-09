@@ -16,7 +16,7 @@ export interface Datapack {
 	modules: Set<Module>;
 }
 
-const Modules = {
+export const Modules = {
 	STRUCTURE_SET: "structure_set",
 	BIOME: "biome",
 	OVERWORLD: "overworld",
