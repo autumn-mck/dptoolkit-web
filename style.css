@@ -67,3 +67,23 @@ a:visited {
 	width: 100%;
 	padding: 1em;
 }
+
+.widget {
+	border: 1px;
+	border-color: #11111b;
+	border-style: solid;
+
+	display: flex;
+	justify-content: space-between;
+	justify-items: stretch;
+}
+.widget + .widget {
+	margin-top: 0.5em;
+}
+
+.widget-text {
+	min-width: 50%;
+}
+.widget-input {
+	min-width: 25%;
+}
