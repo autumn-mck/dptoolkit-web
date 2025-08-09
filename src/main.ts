@@ -12,6 +12,9 @@ async function onFileUploaded(e: Event) {
 	const acceptedTypes = ["application/zip", "application/java-archive", "application/x-zip-compressed"];
 	console.log("Files detected: "); console.log(fileList);
 	const zipFiles = Array.from(fileList).filter((file) => acceptedTypes.includes(file.type));
+	if (zipFiles.length == 0) {
+		window.alert("Couldn't load datapack archive, archive may not be a datapack.");
+	}
 	const datapacks = await Promise.all(zipFiles.map(loadDatapack));
 	const validDatapacks = datapacks.filter((dp) => dp instanceof Object);
 	console.timeEnd("loadDatapacks");
