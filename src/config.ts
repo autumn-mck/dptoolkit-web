@@ -1,14 +1,21 @@
 interface WidgetDefinition {
 	type: string;
 	text: string;
+	default: string | undefined;
 }
 
+interface ConfigDefinition {
+	meta: object;
+	widgets: Array<WidgetDefinition>;
+}
+
+
 export class ConfigClass {
-	file: object;
+	file: {config: ConfigDefinition};
 	widgets: Array<WidgetDefinition> = [];
 
 	constructor(config_object: object) {
-		this.file = config_object;
+		this.file = config_object as {config: ConfigDefinition};
 		this.widgets = this.file.config.widgets;
 	}
 
