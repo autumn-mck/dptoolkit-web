@@ -13,7 +13,7 @@ interface StructureSet {
 	originalPlacement: Readonly<Placement>;
 }
 
-function constructStructureSetItem(
+export function constructStructureSetItem(
 	id: string,
 	originalPlacement: Readonly<Placement>
 ): StructureSet {
@@ -56,7 +56,7 @@ export function getStructureSets(datapacks: ReadonlyArray<Datapack>) {
 			files.map(([filePath, _]) => filePathToSetName(filePath, divider))
 		);
 
-		const jsons: Record<string, any> = {};
+		// const jsons: Record<string, any> = {};
 
 		structureSets.forEach((set) =>
 			files.filter((filePath, _) => {
