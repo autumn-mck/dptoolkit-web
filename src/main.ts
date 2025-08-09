@@ -46,7 +46,7 @@ function createDatapackDisplayElement(dp: Datapack): DocumentFragment {
 	const template = document.getElementById("datapack-template") as HTMLTemplateElement;
 	const clone = template.content.cloneNode(true) as DocumentFragment;
 
-	const { name, description } = getNameDesc(dp.mcmeta);
+	const { name, description } = getNameAndDescription(dp.mcmeta);
 
 	(clone.querySelector(".name") as HTMLElement).innerHTML = name;
 	(clone.querySelector(".description") as HTMLElement).innerHTML = description;
@@ -58,7 +58,7 @@ function createDatapackDisplayElement(dp: Datapack): DocumentFragment {
 	return clone;
 }
 
-function getNameDesc(mcmeta: any): { name: string; description: string } {
+function getNameAndDescription(mcmeta: any): { name: string; description: string } {
 	let name = mcmeta.pack.name;
 	let description = descriptionToDisplayable(mcmeta.pack.description);
 
@@ -69,6 +69,9 @@ function getNameDesc(mcmeta: any): { name: string; description: string } {
 	} else {
 		name = sanitizeHtml(name);
 	}
+
+	// strip colour codes from the name, both easier and more readable
+	name = name.replace(/§./g, "");
 
 	if (!description) {
 		description = "No description available";
