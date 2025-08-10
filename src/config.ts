@@ -90,8 +90,15 @@ export class ConfigClass {
 						element.default === "disabled"
 					);
 				} else if (type === "slider" || type === "number" || type === "value") {
+					const widgetValue = clone.querySelector(".widget-value-text") as HTMLElement | null;
 					if (element.value.default !== undefined) {
 						inputElement!.valueAsNumber = element.value.default;
+
+						const suffix = getElementSuffix(element);
+						if (widgetValue) {
+							widgetValue.innerText = element.value.default.toString() + suffix;
+							widgetValue.dataset.suffix = suffix;
+						}
 					}
 					if (element.value.range) {
 						inputElement!.min = element.value.range[0].toString();
@@ -101,15 +108,7 @@ export class ConfigClass {
 						inputElement!.step = element.value.step.toString();
 					}
 
-					let suffix = "";
-
-					if ("suffix" in element.value && element.value.suffix) {
-						suffix = element.value.suffix;
-					} else if (element.value.type === "percent") {
-						suffix = " (%)";
-					}
-
-					if (suffix && widgetText) widgetText.innerText += suffix;
+					inputElement!.addEventListener("input", updateDisplayedValue);
 				} else if (type === "image") {
 					const imageFile = await zip.file(element.file)?.async("blob");
 					if (imageFile) {
@@ -127,5 +126,34 @@ export class ConfigClass {
 
 		// Return array of HTML elements
 		return htmlWidgets.filter((element) => element !== undefined);
+	}
+}
+
+function getElementSuffix(element: NumberWidget | SliderWidget) {
+	let suffix = "";
+
+	if ("suffix" in element.value && element.value.suffix) {
+		suffix = element.value.suffix;
+	} else if (element.value.type === "percent") {
+		suffix = "%";
+	}
+	return suffix;
+}
+
+function updateDisplayedValue(event: Event) {
+	const target = event.target as HTMLInputElement;
+	const valueElement = target.parentElement?.querySelector(
+		".widget-value-text"
+	) as HTMLElement | null;
+
+	let valueToDisplay: string | number = target.valueAsNumber;
+
+	if (Number.parseFloat(target.min) < 0 && valueToDisplay > 0) {
+		valueToDisplay = `+${valueToDisplay}`;
+	}
+
+	if (valueElement) {
+		const suffix = valueElement.dataset.suffix ?? "";
+		valueElement.innerText = valueToDisplay.toString() + suffix;
 	}
 }
