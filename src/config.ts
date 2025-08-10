@@ -90,7 +90,9 @@ export class ConfigClass {
 						element.default === "disabled"
 					);
 				} else if (type === "slider" || type === "number" || type === "value") {
-					if (element.value.default) inputElement!.valueAsNumber = element.value.default;
+					if (element.value.default !== undefined) {
+						inputElement!.valueAsNumber = element.value.default;
+					}
 					if (element.value.range) {
 						inputElement!.min = element.value.range[0].toString();
 						inputElement!.max = element.value.range[1].toString();
