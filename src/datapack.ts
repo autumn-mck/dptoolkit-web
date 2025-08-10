@@ -1,5 +1,5 @@
 import JSZip from "jszip";
-import { ConfigClass, getWidgetsHtml } from "./config";
+import { ConfigClass } from "./config";
 
 export interface Datapack {
 	id: string;
