@@ -141,7 +141,7 @@ a:visited {
 	background-color: var(--background-above);
 	border: var(--border-width) solid var(--background-below);
 	width: 100%;
-	padding: 1em;
+	padding: 0em;
 }
 
 /* CONFIG WIDGETS AND STUFF */
@@ -156,8 +156,11 @@ a:visited {
 
 	padding-left: 1em;
 	padding-right: 1em;
+	padding-bottom: 0.75em;
+	padding-top: 0.75em;
 
 	accent-color: #cba6f7;
+	background-color: var(--background-above);
 
 	p,
 	h1,
@@ -168,8 +171,12 @@ a:visited {
 	}
 }
 
-.widget + .widget {
-	margin-top: 0.5em;
+/* .widget + .widget {
+	margin-top: 0em;
+} */
+
+.config-screen>.widget-with-input:nth-of-type(odd) {
+  background-color: var(--background);
 }
 
 .widget-input {
