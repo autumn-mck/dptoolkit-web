@@ -82,38 +82,44 @@ export class ConfigClass {
 					return;
 				}
 
-				let template = document.getElementById(typeTemplateMap[type]) as HTMLTemplateElement;
-
 				// Create the thing
+				let template = document.getElementById(typeTemplateMap[type]) as HTMLTemplateElement;
 				let clone = template.content.cloneNode(true) as DocumentFragment;
-				if ("text" in element)
-					(clone.querySelector(".widget-text") as HTMLElement).innerText = element.text;
 
-				if (type == "switch") {
+				const widgetText = clone.querySelector(".widget-text") as HTMLElement | null;
+				const inputElement = clone.querySelector(".widget-input") as HTMLInputElement | null;
+
+				if ("text" in element && widgetText) widgetText.innerText = element.text;
+
+				if (type === "switch") {
 					(clone.querySelector(".widget-switch-input") as HTMLInputElement).checked = !(
 						element.default === "disabled"
 					);
-				} else if (type == "slider" || type == "number" || type == "value") {
-					const inputElement = clone.querySelector(".widget-input") as HTMLInputElement;
-
-					if (element.value.default) inputElement.valueAsNumber = element.value.default;
-					if (element.value.range) inputElement.min = element.value.range[0].toString();
-					if (element.value.range) inputElement.max = element.value.range[1].toString();
-
-					if (element.value.type) {
-						if (element.value.type == "percent") {
-							(clone.querySelector(".widget-text") as HTMLElement).innerText += " (%)";
-						}
+				} else if (type === "slider" || type === "number" || type === "value") {
+					if (element.value.default) inputElement!.valueAsNumber = element.value.default;
+					if (element.value.range) {
+						inputElement!.min = element.value.range[0].toString();
+						inputElement!.max = element.value.range[1].toString();
 					}
-				} else if (type == "image") {
+					if (element.value.step) {
+						inputElement!.step = element.value.step.toString();
+					}
+
+					let suffix = "";
+
+					if ("suffix" in element.value && element.value.suffix) {
+						suffix = element.value.suffix;
+					} else if (element.value.type === "percent") {
+						suffix = " (%)";
+					}
+
+					if (suffix && widgetText) widgetText.innerText += suffix;
+				} else if (type === "image") {
 					(clone.querySelector(".widget-image") as HTMLImageElement).src = "";
 				}
 
 				// Set input ID
-				if (type != "text" && type != "image" && type != "title" && type != "heading") {
-					(clone.querySelector(".widget-input") as HTMLInputElement).id =
-						"widget-input-" + index.toString();
-				}
+				if (inputElement) inputElement.id = "widget-input-" + index.toString();
 
 				return clone;
 			})
