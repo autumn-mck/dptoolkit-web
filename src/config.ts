@@ -1,3 +1,5 @@
+import JSZip from "jszip";
+
 type TextWidget = {
 	type: "title" | "heading" | "text";
 	text: string;
@@ -71,61 +73,65 @@ export class ConfigClass {
 		this.file = config_object as { config: ConfigDefinition };
 		this.widgets = this.file.config?.widgets || [];
 	}
+}
 
-	public get_widgets_html() {
-		let html_widgets = this.widgets
-			.map((element, index) => {
-				const type = element.type;
+export async function getWidgetsHtml(configObject: ConfigClass, zip: JSZip) {
+	let htmlWidgets = await Promise.all(
+		configObject.widgets.map(async (element, index) => {
+			const type = element.type;
 
-				if (!(type in typeTemplateMap)) {
-					console.error("No template found for type", type);
-					return;
+			if (!(type in typeTemplateMap)) {
+				console.error("No template found for type", type);
+				return;
+			}
+
+			// Create the thing
+			let template = document.getElementById(typeTemplateMap[type]) as HTMLTemplateElement;
+			let clone = template.content.cloneNode(true) as DocumentFragment;
+
+			const widgetText = clone.querySelector(".widget-text") as HTMLElement | null;
+			const inputElement = clone.querySelector(".widget-input") as HTMLInputElement | null;
+
+			if ("text" in element && widgetText) widgetText.innerText = element.text;
+
+			if (type === "switch") {
+				(clone.querySelector(".widget-switch-input") as HTMLInputElement).checked = !(
+					element.default === "disabled"
+				);
+			} else if (type === "slider" || type === "number" || type === "value") {
+				if (element.value.default) inputElement!.valueAsNumber = element.value.default;
+				if (element.value.range) {
+					inputElement!.min = element.value.range[0].toString();
+					inputElement!.max = element.value.range[1].toString();
+				}
+				if (element.value.step) {
+					inputElement!.step = element.value.step.toString();
 				}
 
-				// Create the thing
-				let template = document.getElementById(typeTemplateMap[type]) as HTMLTemplateElement;
-				let clone = template.content.cloneNode(true) as DocumentFragment;
+				let suffix = "";
 
-				const widgetText = clone.querySelector(".widget-text") as HTMLElement | null;
-				const inputElement = clone.querySelector(".widget-input") as HTMLInputElement | null;
-
-				if ("text" in element && widgetText) widgetText.innerText = element.text;
-
-				if (type === "switch") {
-					(clone.querySelector(".widget-switch-input") as HTMLInputElement).checked = !(
-						element.default === "disabled"
-					);
-				} else if (type === "slider" || type === "number" || type === "value") {
-					if (element.value.default) inputElement!.valueAsNumber = element.value.default;
-					if (element.value.range) {
-						inputElement!.min = element.value.range[0].toString();
-						inputElement!.max = element.value.range[1].toString();
-					}
-					if (element.value.step) {
-						inputElement!.step = element.value.step.toString();
-					}
-
-					let suffix = "";
-
-					if ("suffix" in element.value && element.value.suffix) {
-						suffix = element.value.suffix;
-					} else if (element.value.type === "percent") {
-						suffix = " (%)";
-					}
-
-					if (suffix && widgetText) widgetText.innerText += suffix;
-				} else if (type === "image") {
-					(clone.querySelector(".widget-image") as HTMLImageElement).src = "";
+				if ("suffix" in element.value && element.value.suffix) {
+					suffix = element.value.suffix;
+				} else if (element.value.type === "percent") {
+					suffix = " (%)";
 				}
 
-				// Set input ID
-				if (inputElement) inputElement.id = "widget-input-" + index.toString();
+				if (suffix && widgetText) widgetText.innerText += suffix;
+			} else if (type === "image") {
+				const imageFile = await zip.file(element.file)?.async("blob");
+				if (imageFile) {
+					(clone.querySelector(".widget-image") as HTMLImageElement).src =
+						URL.createObjectURL(imageFile);
+				}
+			}
 
-				return clone;
-			})
-			.filter((element) => element !== undefined);
+			// Set input ID
+			if (inputElement) inputElement.id = "widget-input-" + index.toString();
 
-		// Return array of HTML elements
-		return html_widgets;
-	}
+			return clone;
+		})
+	);
+
+	// Return array of HTML elements
+	return htmlWidgets.filter((element) => element !== undefined);
 }

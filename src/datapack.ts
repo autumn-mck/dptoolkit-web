@@ -1,5 +1,5 @@
 import JSZip from "jszip";
-import { ConfigClass } from "./config";
+import { ConfigClass, getWidgetsHtml } from "./config";
 
 export interface Datapack {
 	id: string;
@@ -51,7 +51,7 @@ export async function loadDatapack(file: File): Promise<Datapack | string> {
 
 	let configObject = new ConfigClass(config);
 
-	writeConfigWidgetsToDocument(configObject);
+	writeConfigWidgetsToDocument(configObject, zip);
 
 	return {
 		id: mcmeta.pack.id || file.name,
@@ -91,8 +91,8 @@ function detectModules(datapackZip: JSZip): Set<Module> {
 	return modules;
 }
 
-function writeConfigWidgetsToDocument(configObject: ConfigClass) {
-	const widgets: Array<DocumentFragment> = configObject.get_widgets_html();
+async function writeConfigWidgetsToDocument(configObject: ConfigClass, zip: JSZip) {
+	const widgets: Array<DocumentFragment> = await getWidgetsHtml(configObject, zip);
 	const screen = document.getElementById("config-screen")!;
 	widgets.forEach((element) => {
 		screen.appendChild(element);
