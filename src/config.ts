@@ -56,15 +56,6 @@ interface ConfigDefinition {
 	widgets: Array<WidgetDefinition>;
 }
 
-const typeTemplateMap: { [key: string]: string } = {
-	text: "text-widget-template",
-	title: "title-widget-template",
-	image: "image-widget-template",
-	slider: "slider-widget-template",
-	switch: "switch-widget-template",
-	number: "number-widget-template",
-};
-
 export class ConfigClass {
 	file: { config?: ConfigDefinition };
 	widgets: Array<WidgetDefinition> = [];
@@ -79,13 +70,14 @@ export class ConfigClass {
 			this.widgets.map(async (element, index) => {
 				const type = element.type;
 
-				if (!(type in typeTemplateMap)) {
+				// Create the thing
+				const templateId = `${type}-widget-template`;
+				let template = document.getElementById(templateId) as HTMLTemplateElement | null;
+
+				if (!template) {
 					console.error("No template found for type", type);
 					return;
 				}
-
-				// Create the thing
-				let template = document.getElementById(typeTemplateMap[type]) as HTMLTemplateElement;
 				let clone = template.content.cloneNode(true) as DocumentFragment;
 
 				const widgetText = clone.querySelector(".widget-text") as HTMLElement | null;
