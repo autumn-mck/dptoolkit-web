@@ -92,7 +92,7 @@ function detectModules(datapackZip: JSZip): Set<Module> {
 }
 
 async function writeConfigWidgetsToDocument(configObject: ConfigClass, zip: JSZip) {
-	const widgets: Array<DocumentFragment> = await getWidgetsHtml(configObject, zip);
+	const widgets: Array<DocumentFragment> = await configObject.getWidgetsHtml(zip);
 	const screen = document.getElementById("config-screen")!;
 	widgets.forEach((element) => {
 		screen.appendChild(element);
