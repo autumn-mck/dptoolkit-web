@@ -81,7 +81,6 @@ function getNameAndDescription(mcmeta: any): { name: string; description: string
 }
 
 function descriptionToDisplayable(description: Datapack["description"]): string {
-	console.log(description);
 	if (Array.isArray(description))
 		return description
 			.map((desc) => ({ text: sanitizeHtml(desc.text), color: desc.color }))
