@@ -13,8 +13,8 @@ export interface Datapack {
 	icon: Blob | undefined;
 	mcmeta: Record<string, unknown>;
 	zip: JSZip;
-	config: unknown | undefined;
-	configObject: undefined | ConfigClass;
+	rawConfig: unknown | undefined | object;
+	instancedConfig: undefined | ConfigClass;
 	modules: Set<Module>;
 }
 
@@ -49,21 +49,23 @@ export async function loadDatapack(file: File): Promise<Datapack | string> {
 	let config = {};
 	if (modules.has(Modules.DPCONFIG)) config = await loadDpConfig(zip);
 
-	let configObject = new ConfigClass(config);
-
-	writeConfigWidgetsToDocument(configObject, zip);
-
-	return {
+	let new_pack: Datapack = {
 		id: mcmeta.pack.id || file.name,
 		name: mcmeta.pack.name,
 		description: mcmeta.pack.description,
-		icon,
-		mcmeta,
-		config,
-		configObject,
-		zip,
-		modules,
+		icon: icon,
+		mcmeta: mcmeta,
+		rawConfig: config,
+		instancedConfig: undefined,
+		zip: zip,
+		modules: modules,
 	};
+
+	new_pack.instancedConfig = new ConfigClass(new_pack);
+	writeConfigWidgetsToPage(new_pack.instancedConfig, zip);
+	new_pack.instancedConfig.retrieveValuesFromPage();
+
+	return new_pack;
 }
 
 async function loadDpConfig(datapackZip: JSZip): Promise<Object> {
@@ -91,7 +93,7 @@ function detectModules(datapackZip: JSZip): Set<Module> {
 	return modules;
 }
 
-async function writeConfigWidgetsToDocument(configObject: ConfigClass, zip: JSZip) {
+async function writeConfigWidgetsToPage(configObject: ConfigClass, zip: JSZip) {
 	const widgets: Array<DocumentFragment> = await configObject.getWidgetsHtml(zip);
 	const screen = document.getElementById("config-screen")!;
 	widgets.forEach((element) => {

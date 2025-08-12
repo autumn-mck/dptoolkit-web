@@ -1,4 +1,5 @@
 import JSZip from "jszip";
+import type { Datapack } from "./datapack";
 
 type TextWidget = {
 	type: "title" | "heading" | "text";
@@ -25,6 +26,7 @@ type NumberWidget = {
 	};
 	method: string;
 	slots: string | string[];
+	inputted_value: number;
 };
 
 type SliderWidget = {
@@ -37,6 +39,7 @@ type SliderWidget = {
 	};
 	method: string;
 	slots: string | string[];
+	inputted_value: number;
 };
 
 type SwitchWidget = {
@@ -47,9 +50,13 @@ type SwitchWidget = {
 	default?: "enabled" | "disabled";
 	enabled_text?: string;
 	disabled_text?: string;
+	inputted_value: boolean;
 };
 
+type InputWidgetDefinition = NumberWidget | SliderWidget | SwitchWidget;
 type WidgetDefinition = TextWidget | ImageWidget | NumberWidget | SliderWidget | SwitchWidget;
+
+const inputTypes: ReadonlyArray<string> = ["number", "value", "slider", "switch"];
 
 interface ConfigDefinition {
 	meta: object;
@@ -57,12 +64,18 @@ interface ConfigDefinition {
 }
 
 export class ConfigClass {
+	datapack_id: string;
 	file: { config?: ConfigDefinition };
 	widgets: Array<WidgetDefinition> = [];
 
-	constructor(config_object: object) {
-		this.file = config_object as { config: ConfigDefinition };
+	constructor(datapack: Datapack) {
+		this.datapack_id = datapack.id;
+		this.file = datapack.rawConfig as { config: ConfigDefinition };
 		this.widgets = this.file.config?.widgets || [];
+	}
+
+	getWidgetList() {
+		return this.widgets;
 	}
 
 	async getWidgetsHtml(zip: JSZip) {
@@ -89,6 +102,7 @@ export class ConfigClass {
 					(clone.querySelector(".widget-switch-input") as HTMLInputElement).checked = !(
 						element.default === "disabled"
 					);
+
 				} else if (type === "slider" || type === "number" || type === "value") {
 					const widgetValue = clone.querySelector(".widget-value-text") as HTMLElement | null;
 					if (element.value.default !== undefined) {
@@ -109,6 +123,7 @@ export class ConfigClass {
 					}
 
 					inputElement!.addEventListener("input", updateDisplayedValue);
+
 				} else if (type === "image") {
 					const imageFile = await zip.file(element.file)?.async("blob");
 					if (imageFile) {
@@ -118,7 +133,7 @@ export class ConfigClass {
 				}
 
 				// Set input ID
-				if (inputElement) inputElement.id = "widget-input-" + index.toString();
+				if (inputElement) inputElement.id = "widget-input-" + this.datapack_id.toString() + index.toString();
 
 				return clone;
 			})
@@ -127,6 +142,28 @@ export class ConfigClass {
 		// Return array of HTML elements
 		return htmlWidgets.filter((element) => element !== undefined);
 	}
+
+	// Retrieve values and store them in the widget list
+	public retrieveValuesFromPage() {
+		const widgets = this.getWidgetList();
+
+		let i = 0;
+		widgets.forEach(widget_object => {
+			if (inputTypes.includes(widget_object.type))  {
+				
+				const element_id = "widget-input-" + this.datapack_id.toString() + i.toString();
+				console.log(element_id); // this works
+				const element_html = document.getElementById(element_id) as HTMLInputElement | null;
+				console.log(element_html); // this equals null
+
+				if (element_html != null) {
+					(widget_object as InputWidgetDefinition).inputted_value = parseFloat(element_html.value);
+				}
+			}
+			i += 1;
+		});
+	}
+
 }
 
 function getElementSuffix(element: NumberWidget | SliderWidget) {
