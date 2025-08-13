@@ -185,12 +185,15 @@ export class ConfigClass {
 			if (inputTypes.includes(widget_object.type))  {
 				
 				const element_id = "widget-input-" + this.datapack_id.toString() + i.toString();
-				console.log(element_id); // this works
 				const element_html = document.getElementById(element_id) as HTMLInputElement | null;
-				console.log(element_html); // this equals null
 
 				if (element_html != null) {
 					(widget_object as InputWidgetDefinition).inputted_value = parseFloat(element_html.value);
+					if ((widget_object as InputWidgetDefinition).type === "slider") {
+						if ((widget_object as SliderWidget).value.type === "percent") {
+							(widget_object as InputWidgetDefinition).inputted_value = parseFloat(element_html.value) / 100;
+						}
+					}
 				}
 			}
 			i += 1;

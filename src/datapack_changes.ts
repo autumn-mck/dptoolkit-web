@@ -54,6 +54,7 @@ export class DatapackModifier {
 				application_method: method
 			};
 			this.changeQueue.push(change);
+			console.log(`Queued change ${change.datapack.id} -> ${change.file_path} -> ${change.value_path} -> ${change.value} -> ${change.application_method}`);
 		}
 		else {
 			console.warn(`Datapack change wasn't queued - value ${value} (type <${typeof value}>) doesn't match application method "${method}!"`);

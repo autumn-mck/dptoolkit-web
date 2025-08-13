@@ -99,5 +99,9 @@ const exportButtonElement = document.getElementById("export-button")!;
 exportButtonElement.addEventListener("click", exportButtonClicked, { passive: true });
 
 function exportButtonClicked() {
-	console.log("Export button clicked")
+	console.log("Export button clicked");
+
+	datapackStore.getAll().forEach(datapack => {
+		datapack.instancedConfig?.apply();
+	});
 }
