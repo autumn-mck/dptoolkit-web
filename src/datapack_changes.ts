@@ -54,7 +54,7 @@ export class DatapackModifier {
 				application_method: method
 			};
 			this.changeQueue.push(change);
-			console.log(`Queued change ${change.datapack.id} -> ${change.file_path} -> ${change.value_path} -> ${change.value} -> ${change.application_method}`);
+			console.log(`Queued change: \nDatapack: ${change.datapack.id}\nFiles: ${change.file_path}\nValue: ${change.value_path}\nValue: ${change.value}\nMethod: ${change.application_method}`);
 		}
 		else {
 			console.warn(`Datapack change wasn't queued - value ${value} (type <${typeof value}>) doesn't match application method "${method}!"`);
@@ -194,7 +194,7 @@ function applyToValue(json: {[key: string]: any}, value_path: string, value: Dat
 			case "remove":
 				let a = json[last_key] as Array<any>;
 				a = a.filter(
-					(element) => {element == value}
+					(element) => {element != value}
 				);
 				json[last_key] = a;
 				break;

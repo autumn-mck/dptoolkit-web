@@ -1,6 +1,6 @@
 import JSZip from "jszip";
 import type { Datapack } from "./datapack";
-import { DatapackModifierInstance, type DatapackChangeMethod } from "./datapack_changes";
+import { DatapackModifierInstance, type DatapackChangeMethod, type DatapackChangeValue } from "./datapack_changes";
 
 type TextWidget = {
 	type: "title" | "heading" | "text";
@@ -326,7 +326,7 @@ type ifElseTransformer = {
 	false: Transformer;
 }
 
-function processTransformer(method_input: number, slot_values: {[key: string]: any}, transformer: Transformer): string | number {
+function processTransformer(method_input: number, slot_values: {[key: string]: any}, transformer: Transformer): DatapackChangeValue {
 
 	if (typeof transformer === "number") {
 		return transformer as number;
@@ -347,7 +347,7 @@ function processTransformer(method_input: number, slot_values: {[key: string]: a
 		return transformer as string;
 	}
 
-	else {
+	else if (typeof transformer === "object") {
 		switch (transformer.function) {
 			// Math transformers with two arguments
 			case "add":
@@ -389,6 +389,7 @@ function processTransformer(method_input: number, slot_values: {[key: string]: a
 				throw new Error("Couldn't process unknown transformer");
 		}
 	}
+	else throw new Error("Couldn't process undefined transformer!");
 }
 
 ////////// METHOD LOGIC //////////
