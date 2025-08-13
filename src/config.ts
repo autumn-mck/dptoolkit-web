@@ -80,6 +80,10 @@ export class ConfigClass {
 		return this.widgets;
 	}
 
+	stuff() {
+		dostuff;
+	}
+
 	async getWidgetsHtml(zip: JSZip) {
 		let htmlWidgets = await Promise.all(
 			this.widgets.map(async (element, index) => {
@@ -197,6 +201,7 @@ function updateDisplayedValue(event: Event) {
 	}
 }
 
+
 ////////// ACCESSOR LOGIC //////////
 
 type Accessor = {
@@ -221,7 +226,7 @@ const AccessorMethods: ReadonlyArray<string> = [
 
 ///// ACCESSOR FUNCTIONS /////
 
-function readAccessors(datapack: Datapack, accessor_list: Array<object>) {
+function readAccessors(datapack: Datapack, accessor_list: Array<object>): Array<Accessor> {
 	let refined_accessor_list = accessor_list.map(
 		(accessor) => {
 			return asAccessor(datapack, accessor);
@@ -265,6 +270,7 @@ function findMatchingFiles(datapack: Datapack, file_path: string) {
 	}
 	return file_names;
 }
+
 
 ////////// TRANSFORMER LOGIC //////////
 
@@ -353,4 +359,34 @@ function processTransformer(method_input: number, slot_values: {[key: string]: n
 				throw new Error("Couldn't process unknown transformer");
 		}
 	}
+}
+
+////////// METHOD LOGIC //////////
+
+type Method = {
+	transformer: Transformer;
+	accessors: Array<Accessor>;
+}
+
+async function dostuff(datapack: Datapack, method: Method) {
+	const final_value = processTransformer(
+		0,
+		{},
+		method.transformer
+	);
+	const accessors = readAccessors(
+		datapack,
+		method.accessors
+	);
+
+	await accessors.forEach(async accessor => {
+		const files = findMatchingFiles(datapack, accessor.file_path);
+
+		await files.forEach(async file_name => {
+			const content = await datapack.zip.files[file_name].async("text");
+			JSON.parse(content);
+		});
+
+	});
+
 }
