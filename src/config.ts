@@ -64,11 +64,13 @@ interface ConfigDefinition {
 }
 
 export class ConfigClass {
+	datapack: Datapack;
 	datapack_id: string;
 	file: { config?: ConfigDefinition };
 	widgets: Array<WidgetDefinition> = [];
 
 	constructor(datapack: Datapack) {
+		this.datapack = datapack;
 		this.datapack_id = datapack.id;
 		this.file = datapack.rawConfig as { config: ConfigDefinition };
 		this.widgets = this.file.config?.widgets || [];
@@ -192,5 +194,163 @@ function updateDisplayedValue(event: Event) {
 	if (valueElement) {
 		const suffix = valueElement.dataset.suffix ?? "";
 		valueElement.innerText = valueToDisplay.toString() + suffix;
+	}
+}
+
+////////// ACCESSOR LOGIC //////////
+
+type Accessor = {
+	method: string;
+	file_path: string;
+	value_path: string;
+};
+
+const AccessorMethods: ReadonlyArray<string> = [
+	"multiply",
+	"divide",
+	"add",
+	"subtract",
+	"set",
+	"multiply_int",
+	"divide_int",
+	"add_int",
+	"subtract_int",
+	"remove",
+	"pop"
+];
+
+///// ACCESSOR FUNCTIONS /////
+
+function readAccessors(datapack: Datapack, accessor_list: Array<object>) {
+	let refined_accessor_list = accessor_list.map(
+		(accessor) => {
+			return asAccessor(datapack, accessor);
+		}
+	) as Array<Accessor | null>;
+
+	refined_accessor_list = refined_accessor_list.filter(
+		(accessor) => accessor != null);
+
+	return refined_accessor_list as Array<Accessor>;
+}
+
+function asAccessor(datapack: Datapack, accessor: object) {
+	if (accessorIsValid(datapack, accessor)) {
+		return accessor as Accessor;
+	}
+	else return null;
+}
+
+function accessorIsValid(datapack: Datapack, accessor: object) {
+	if ("method" in accessor && "file_path" in accessor && "value_path" in accessor) {
+		if (AccessorMethods.includes(accessor["method"] as string)) {
+			const files = findMatchingFiles(datapack, accessor["file_path"] as string);
+			if (files.length != 0) {
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+function findMatchingFiles(datapack: Datapack, file_path: string) {
+	let file_names: Array<string> = [];
+
+	for (const key in datapack.zip.files) {
+		if (Object.prototype.hasOwnProperty.call(datapack.zip.files, key)) {
+			if (key.includes(file_path)) {
+				file_names.push(key);
+			}
+		}
+	}
+	return file_names;
+}
+
+////////// TRANSFORMER LOGIC //////////
+
+type Transformer = string | number | ifElseTransformer | mathTransformerTwoArgs | mathTransformerSingleArg;
+
+type mathTransformerTwoArgs = {
+	function: "add" | "multiply";
+	argument: Transformer;
+	argument1: Transformer;
+}
+
+type mathTransformerSingleArg = {
+	function: "int" | "square" | "square_root";
+	argument: Transformer;
+}
+
+type ifElseTransformer = {
+	function: "if_else";
+	argument: Transformer;
+	argument1: Transformer;
+	operator: "==" | ">=" | ">";
+	true: Transformer;
+	false: Transformer;
+}
+
+function processTransformer(method_input: number, slot_values: {[key: string]: number}, transformer: Transformer): string | number {
+
+	if (typeof transformer === "number") {
+		return transformer as number;
+	}
+
+	else if (typeof transformer === "string") {
+		if (transformer.charAt(0) == "$" || transformer == "input") {
+			if (transformer == "$input" || transformer == "$in" || transformer == "input") {
+				return method_input;
+			}
+			else {
+				const variable = transformer.slice(1);
+				if (variable in slot_values) {
+					return slot_values[variable];
+				}
+			}
+		}
+		return transformer as string;
+	}
+
+	else {
+		switch (transformer.function) {
+			// Math transformers with two arguments
+			case "add":
+				return (processTransformer(method_input, slot_values, transformer.argument) as number) + (processTransformer(method_input, slot_values, transformer.argument1) as number);
+			
+			case "multiply":
+				return (processTransformer(method_input, slot_values, transformer.argument) as number) * (processTransformer(method_input, slot_values, transformer.argument1) as number);
+
+			// Math transformers with a single argument
+			case "int": 
+				return Math.round(processTransformer(method_input, slot_values, transformer.argument) as number);
+				
+			case "square_root": 
+				return Math.sqrt(processTransformer(method_input, slot_values, transformer.argument) as number);
+
+			case "square": 
+				return Math.pow(processTransformer(method_input, slot_values, transformer.argument) as number, 2);
+
+			// if-else transformer
+			case "if_else":
+				if (transformer.operator == "==") {
+					if (transformer.argument == transformer.argument1) return processTransformer(method_input, slot_values, transformer.true);
+					else return processTransformer(method_input, slot_values, transformer.false);
+				}
+
+				else if (transformer.operator == ">=") {
+					if (transformer.argument >= transformer.argument1) return processTransformer(method_input, slot_values, transformer.true);
+					else return processTransformer(method_input, slot_values, transformer.false);
+				}
+
+				else if (transformer.operator == ">") {
+					if (transformer.argument > transformer.argument1) return processTransformer(method_input, slot_values, transformer.true);
+					else return processTransformer(method_input, slot_values, transformer.false);
+				}
+
+				throw new Error("Couldn't process if-else transformer");
+
+			default:
+				throw new Error("Couldn't process unknown transformer");
+		}
 	}
 }

@@ -62,8 +62,10 @@ export async function loadDatapack(file: File): Promise<Datapack | string> {
 	};
 
 	new_pack.instancedConfig = new ConfigClass(new_pack);
-	writeConfigWidgetsToPage(new_pack.instancedConfig, zip);
+	await writeConfigWidgetsToPage(new_pack.instancedConfig, zip);
 	new_pack.instancedConfig.retrieveValuesFromPage();
+
+	console.log(new_pack.zip.files);
 
 	return new_pack;
 }
