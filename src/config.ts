@@ -210,11 +210,13 @@ export class ConfigClass {
 							}
 
 							// Method input
-							input_value = undefined;
 							if ("method" in widget) {
-								if (widget.method === method_name) {
+								if (widget.method == method_name) {
 									input_value = val;
 								}
+							}
+							else {
+								input_value = undefined;
 							}
 
 							// Slots
