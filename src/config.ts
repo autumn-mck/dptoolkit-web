@@ -2,6 +2,8 @@ import JSZip from "jszip";
 import type { Datapack } from "./datapack";
 import { DatapackModifierInstance, type DatapackChangeMethod, type DatapackChangeValue } from "./datapack_changes";
 
+////////// WIDGET OBJECT DEFINITIONS //////////
+
 type TextWidget = {
 	type: "title" | "heading" | "text";
 	text: string;
@@ -17,29 +19,34 @@ type ImageWidget = {
 type NumberWidget = {
 	type: "number" | "value";
 	text: string;
+	method?: string;
+	slots?: string | string[];
+
 	value: {
 		type: "int" | "percent" | "float";
-		default?: number;
-		range?: [number, number];
+		default: number;			// v1 -> v2 change: default MUST be specified
+		range: [number, number];	// change: range MUST be specified
 		step?: number;
 		suffix?: string;
 		decimals?: number;
 	};
-	method: string;
-	slots: string | string[];
+
 	inputted_value: number;
 };
 
 type SliderWidget = {
 	type: "slider";
+	text: string;
+	method?: string;
+	slots?: string | string[];
+
 	value: {
 		type: "int" | "percent" | "float";
-		default?: number;
-		range?: [number, number];
+		default: number;			// v1 -> v2 change: default MUST be specified
+		range: [number, number];	// change: range MUST be specified
 		step?: number;
 	};
-	method: string;
-	slots: string | string[];
+
 	inputted_value: number;
 };
 
@@ -47,10 +54,14 @@ type SwitchWidget = {
 	type: "switch";
 	text: string;
 	method?: string;
-	slots: string | string[];
-	default?: "enabled" | "disabled";
-	enabled_text?: string;
-	disabled_text?: string;
+	slots?: string | string[];
+	
+	value: {
+		default: 1 | 0;				// v1 -> v2 change: default MUST be specified
+		enabled_text?: string;
+		disabled_text?: string;
+	};
+
 	inputted_value: boolean;
 };
 
@@ -60,7 +71,11 @@ type WidgetDefinition = TextWidget | ImageWidget | NumberWidget | SliderWidget |
 const inputTypes: ReadonlyArray<string> = ["number", "value", "slider", "switch"];
 
 interface ConfigDefinition {
-	meta: object;
+	meta: {
+		ver: "1" | "2";
+		tab: string;
+		id: string;
+	};
 	widgets: Array<WidgetDefinition>;
 	methods: {[key: string]: Method};
 }
@@ -80,35 +95,6 @@ export class ConfigClass {
 
 	private getWidgetList() {
 		return this.widgets;
-	}
-
-	apply() {
-		this.retrieveValuesFromPage();
-
-		const methods = this.file.config?.methods;
-		for (const method_name in methods) {
-			if (Object.prototype.hasOwnProperty.call(methods, method_name)) {
-				const method = methods[method_name];
-				let input_value: any = null;
-
-				this.getWidgetList().forEach(widget => {
-					if (inputTypes.includes(widget.type)) {
-						if ("method" in widget) {
-							if (widget.method === method_name) {
-								input_value = widget.inputted_value;
-							}
-						}
-					}
-				});
-
-				applyMethodAsChangeToPack(
-					this.datapack,
-					method,
-					input_value != null ? input_value : 0,
-					{}
-				);
-			}
-		}
 	}
 
 	public async getWidgetsHtml(zip: JSZip) {
@@ -133,7 +119,7 @@ export class ConfigClass {
 
 				if (type === "switch") {
 					(clone.querySelector(".widget-switch-input") as HTMLInputElement).checked = !(
-						element.default === "disabled"
+						element.value.default == 0
 					);
 
 				} else if (type === "slider" || type === "number" || type === "value") {
@@ -188,16 +174,76 @@ export class ConfigClass {
 				const element_html = document.getElementById(element_id) as HTMLInputElement | null;
 
 				if (element_html != null) {
-					(widget_object as InputWidgetDefinition).inputted_value = parseFloat(element_html.value);
-					if ((widget_object as InputWidgetDefinition).type === "slider") {
-						if ((widget_object as SliderWidget).value.type === "percent") {
-							(widget_object as InputWidgetDefinition).inputted_value = parseFloat(element_html.value) / 100;
-						}
+					if (widget_object.type !== "switch") {
+						(widget_object as InputWidgetDefinition).inputted_value = parseFloat(element_html.value);
+					}
+					else {
+						(widget_object as SwitchWidget).inputted_value = element_html.checked;
 					}
 				}
 			}
 			i += 1;
 		});
+	}
+
+	public apply() {
+		this.retrieveValuesFromPage();
+		const methods = this.file.config?.methods;
+
+		for (const method_name in methods) {
+			if (Object.prototype.hasOwnProperty.call(methods, method_name)) {
+				const method = methods[method_name];
+
+				let input_value: any = null;
+				let default_value: any = null;
+				let slots: {[key: string]: any} = {};
+
+				this.getWidgetList().forEach(widget => {
+					if (inputTypes.includes(widget.type) && "inputted_value" in widget) {
+						default_value = (widget as InputWidgetDefinition).value.default;
+
+						if (widget.inputted_value != default_value) {
+							let val = widget.inputted_value;
+
+							if (widget.type === "slider" && widget.value.type === "percent") {
+								val = (val as number) / 100;
+							}
+
+							// Method input
+							if ("method" in widget) {
+								if (widget.method === method_name) {
+									input_value = val;
+								}
+							}
+
+							// Slots
+							if ("slots" in widget && widget.slots != undefined) {
+								if (typeof widget.slots === "string") {
+									slots[widget.slots] = val;
+								}
+								else {
+									widget.slots.forEach(element => {
+										slots[element] = val;
+									});
+								}
+							}
+						}
+					}
+				});
+
+				if (input_value == null) {
+					console.log(`Input value is null, so not applying method ${this.datapack_id}:${method_name}`);
+				}
+				else {
+					applyMethodAsChangeToPack(
+						this.datapack,
+						method,
+						input_value,
+						slots
+					);
+				}
+			}
+		}
 	}
 
 }
@@ -236,7 +282,7 @@ function updateDisplayedValue(event: Event) {
 
 type Accessor = {
 	method: string;
-	file_path: string;
+	file_path: string | Array<string>;
 	value_path: string;
 };
 
@@ -256,10 +302,10 @@ const AccessorMethods: ReadonlyArray<string> = [
 
 ///// ACCESSOR FUNCTIONS /////
 
-function readAccessors(datapack: Datapack, accessor_list: Array<object>): Array<Accessor> {
+function readAccessors(accessor_list: Array<object>): Array<Accessor> {
 	let refined_accessor_list = accessor_list.map(
 		(accessor) => {
-			return asAccessor(datapack, accessor);
+			return asAccessor(accessor);
 		}
 	) as Array<Accessor | null>;
 
@@ -269,37 +315,34 @@ function readAccessors(datapack: Datapack, accessor_list: Array<object>): Array<
 	return refined_accessor_list as Array<Accessor>;
 }
 
-function asAccessor(datapack: Datapack, accessor: object) {
-	if (accessorIsValid(datapack, accessor)) {
+function asAccessor(accessor: object) {
+	if (accessorIsValid(accessor)) {
 		return accessor as Accessor;
 	}
 	else return null;
 }
 
-function accessorIsValid(datapack: Datapack, accessor: object) {
+function accessorIsValid(accessor: object) {
 	if ("method" in accessor && "file_path" in accessor && "value_path" in accessor) {
 		if (AccessorMethods.includes(accessor["method"] as string)) {
-			const files = findMatchingFiles(datapack, accessor["file_path"] as string);
-			if (files.length != 0) {
-				return true;
-			}
+			return true;
 		}
 	}
 	return false;
 }
 
-function findMatchingFiles(datapack: Datapack, file_path: string) {
-	let file_names: Array<string> = [];
+// function findMatchingFiles(datapack: Datapack, file_path: string) {
+// 	let file_names: Array<string> = [];
 
-	for (const key in datapack.zip.files) {
-		if (Object.prototype.hasOwnProperty.call(datapack.zip.files, key)) {
-			if (key.includes(file_path)) {
-				file_names.push(key);
-			}
-		}
-	}
-	return file_names;
-}
+// 	for (const key in datapack.zip.files) {
+// 		if (Object.prototype.hasOwnProperty.call(datapack.zip.files, key)) {
+// 			if (key.includes(file_path)) {
+// 				file_names.push(key);
+// 			}
+// 		}
+// 	}
+// 	return file_names;
+// }
 
 
 ////////// TRANSFORMER LOGIC //////////
@@ -406,12 +449,20 @@ function applyMethodAsChangeToPack(datapack: Datapack, method: Method, method_in
 		method.transformer
 	);
 	const accessors = readAccessors(
-		datapack,
 		method.accessors
 	);
 	accessors.forEach(accessor => {
-		DatapackModifierInstance.queueChange(
-			datapack, accessor.file_path, accessor.value_path, final_value, accessor.method as DatapackChangeMethod
-		);
+		if (typeof accessor.file_path === "string") {
+			DatapackModifierInstance.queueChange(
+				datapack, accessor.file_path, accessor.value_path, final_value, accessor.method as DatapackChangeMethod
+			);
+		}
+		else {
+			accessor.file_path.forEach(single_path => {
+				DatapackModifierInstance.queueChange(
+					datapack, single_path, accessor.value_path, final_value, accessor.method as DatapackChangeMethod
+				);
+			});
+		}
 	});
 }
