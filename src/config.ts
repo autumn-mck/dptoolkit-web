@@ -210,6 +210,7 @@ export class ConfigClass {
 							}
 
 							// Method input
+							input_value = undefined;
 							if ("method" in widget) {
 								if (widget.method === method_name) {
 									input_value = val;
@@ -231,7 +232,7 @@ export class ConfigClass {
 					}
 				});
 
-				if (input_value == null) {
+				if (input_value === null) {
 					console.log(`Input value is null, so not applying method ${this.datapack_id}:${method_name}`);
 				}
 				else {
@@ -369,7 +370,7 @@ type ifElseTransformer = {
 	false: Transformer;
 }
 
-function processTransformer(method_input: number, slot_values: {[key: string]: any}, transformer: Transformer): DatapackChangeValue {
+function processTransformer(method_input: number | boolean | undefined, slot_values: {[key: string]: any}, transformer: Transformer): DatapackChangeValue {
 
 	if (typeof transformer === "number") {
 		return transformer as number;
@@ -378,6 +379,9 @@ function processTransformer(method_input: number, slot_values: {[key: string]: a
 	else if (typeof transformer === "string") {
 		if (transformer.charAt(0) == "$" || transformer == "input") {
 			if (transformer == "$input" || transformer == "$in" || transformer == "input") {
+				if (method_input === undefined) {
+					throw new Error("Trying to access undefined method input?");
+				}
 				return method_input;
 			}
 			else {
