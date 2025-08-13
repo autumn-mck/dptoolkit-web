@@ -94,3 +94,10 @@ function sanitizeHtml(unsafe: string): string {
 	div.innerText = unsafe;
 	return div.innerHTML;
 }
+
+const exportButtonElement = document.getElementById("export-button")!;
+exportButtonElement.addEventListener("click", exportButtonClicked, { passive: true });
+
+function exportButtonClicked() {
+	console.log("Export button clicked")
+}

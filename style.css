@@ -187,3 +187,14 @@ a:visited {
 	color: inherit;
 	font-family: inherit;
 }
+
+button {
+	border: 2px;
+	border-color: var(--background-below);
+	border-style: solid;
+	background-color: var(--background-above);
+	font: inherit;
+	color: inherit;
+	padding-bottom: 0.5em;
+	padding-top: 0.5em;
+}
