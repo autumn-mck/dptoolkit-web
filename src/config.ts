@@ -62,6 +62,7 @@ const inputTypes: ReadonlyArray<string> = ["number", "value", "slider", "switch"
 interface ConfigDefinition {
 	meta: object;
 	widgets: Array<WidgetDefinition>;
+	methods: {[key: string]: Method};
 }
 
 export class ConfigClass {
@@ -77,15 +78,40 @@ export class ConfigClass {
 		this.widgets = this.file.config?.widgets || [];
 	}
 
-	getWidgetList() {
+	private getWidgetList() {
 		return this.widgets;
 	}
 
-	stuff() {
-		dostuff;
+	apply() {
+		this.retrieveValuesFromPage();
+
+		const methods = this.file.config?.methods;
+		for (const method_name in methods) {
+			if (Object.prototype.hasOwnProperty.call(methods, method_name)) {
+				const method = methods[method_name];
+				let input_value: any = null;
+
+				this.getWidgetList().forEach(widget => {
+					if (inputTypes.includes(widget.type)) {
+						if ("method" in widget) {
+							if (widget.method === method_name) {
+								input_value = widget.inputted_value;
+							}
+						}
+					}
+				});
+
+				applyMethodAsChangeToPack(
+					this.datapack,
+					method,
+					input_value != null ? input_value : 0,
+					{}
+				);
+			}
+		}
 	}
 
-	async getWidgetsHtml(zip: JSZip) {
+	public async getWidgetsHtml(zip: JSZip) {
 		let htmlWidgets = await Promise.all(
 			this.widgets.map(async (element, index) => {
 				const type = element.type;
@@ -297,7 +323,7 @@ type ifElseTransformer = {
 	false: Transformer;
 }
 
-function processTransformer(method_input: number, slot_values: {[key: string]: number}, transformer: Transformer): string | number {
+function processTransformer(method_input: number, slot_values: {[key: string]: any}, transformer: Transformer): string | number {
 
 	if (typeof transformer === "number") {
 		return transformer as number;
@@ -369,29 +395,19 @@ type Method = {
 	accessors: Array<Accessor>;
 }
 
-async function dostuff(datapack: Datapack, method: Method) {
+function applyMethodAsChangeToPack(datapack: Datapack, method: Method, method_input: any, slots: object) {
 	const final_value = processTransformer(
-		0,
-		{},
+		method_input,
+		slots,
 		method.transformer
 	);
 	const accessors = readAccessors(
 		datapack,
 		method.accessors
 	);
-
-	await accessors.forEach(async accessor => {
-		const files = findMatchingFiles(datapack, accessor.file_path);
-
-		await files.forEach(async file_name => {
-			const content = await datapack.zip.files[file_name].async("text");
-			JSON.parse(content);
-
-			DatapackModifierInstance.queueChange(
-				datapack, file_name, accessor.value_path, final_value, accessor.method as DatapackChangeMethod
-			);
-		});
-
+	accessors.forEach(accessor => {
+		DatapackModifierInstance.queueChange(
+			datapack, accessor.file_path, accessor.value_path, final_value, accessor.method as DatapackChangeMethod
+		);
 	});
-
 }
