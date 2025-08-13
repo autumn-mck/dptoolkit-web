@@ -1,6 +1,6 @@
 import JSZip from "jszip";
 import type { Datapack } from "./datapack";
-import { DatapackModifierInstance } from "./datapack_changes";
+import { DatapackModifierInstance, type DatapackChangeMethod } from "./datapack_changes";
 
 type TextWidget = {
 	type: "title" | "heading" | "text";
@@ -388,7 +388,7 @@ async function dostuff(datapack: Datapack, method: Method) {
 			JSON.parse(content);
 
 			DatapackModifierInstance.queueChange(
-				datapack, file_name, accessor.value_path, final_value
+				datapack, file_name, accessor.value_path, final_value, accessor.method as DatapackChangeMethod
 			);
 		});
 
