@@ -385,6 +385,7 @@ async function dostuff(datapack: Datapack, method: Method) {
 		await files.forEach(async file_name => {
 			const content = await datapack.zip.files[file_name].async("text");
 			JSON.parse(content);
+			final_value as number + 1;
 		});
 
 	});
