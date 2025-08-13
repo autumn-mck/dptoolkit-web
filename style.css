@@ -189,7 +189,8 @@ a:visited {
 }
 
 button {
-	border: 2px;
+	border: var(--border-width);
+	border-bottom: 6px;
 	border-color: var(--background-below);
 	border-style: solid;
 	background-color: var(--background-above);
@@ -197,4 +198,12 @@ button {
 	color: inherit;
 	padding-bottom: 0.5em;
 	padding-top: 0.5em;
+}
+button:hover {
+	background-color: var(--background);
+	cursor: pointer;
+}
+button:active {
+	background-color: var(--background-below);
+	color:#cba6f7;
 }
