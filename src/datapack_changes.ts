@@ -187,7 +187,7 @@ function applyToValue(json: {[key: string]: any}, value_path: string, value: Dat
 
 			case "pop":
 				let arr = json[last_key] as Array<any>;
-				delete arr[value as number];
+				delete arr[typeof value === "string" ? parseInt(value) : value as number];
 				json[last_key] = arr;
 				break;
 
