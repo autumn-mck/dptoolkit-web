@@ -1,5 +1,6 @@
 import JSZip from "jszip";
 import type { Datapack } from "./datapack";
+import { DatapackModifierInstance } from "./datapack_changes";
 
 type TextWidget = {
 	type: "title" | "heading" | "text";
@@ -385,7 +386,10 @@ async function dostuff(datapack: Datapack, method: Method) {
 		await files.forEach(async file_name => {
 			const content = await datapack.zip.files[file_name].async("text");
 			JSON.parse(content);
-			final_value as number + 1;
+
+			DatapackModifierInstance.queueChange(
+				datapack, file_name, accessor.value_path, final_value
+			);
 		});
 
 	});
