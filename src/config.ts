@@ -72,7 +72,7 @@ const inputTypes: ReadonlyArray<string> = ["number", "value", "slider", "switch"
 
 interface ConfigDefinition {
 	meta: {
-		ver: "1" | "2";
+		ver: 1 | 2;
 		tab: string;
 		id: string;
 	};
