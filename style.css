@@ -287,3 +287,24 @@ footer {
 	accent-color: #cba6f7;
 	background-color: var(--background-above);
 }
+
+div.header {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	width: 100%;
+	* {
+		margin: 0rem 1rem;
+		vertical-align: top;
+	}
+	svg {
+		height: 1.5rem;
+		padding: 0;
+		margin: 0;
+	}
+	a {
+		color: aliceblue;
+		text-decoration: none;
+		font-weight: bold;
+	}
+}
