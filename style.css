@@ -6,6 +6,8 @@
 	--background-above: #1e1e2e;
 	--background-above-above: #363a4f;
 
+	--accent-color: #cba6f7;
+
 	--border-width: 2px;
 }
 
@@ -39,11 +41,47 @@ body {
 }
 
 a:link {
-	color: #cba6f7;
+	color: var(--accent-color);
 }
 a:visited {
 	color: #dec7fa;
 }
+
+button {
+	border: var(--border-width);
+	border-bottom: 6px;
+	border-color: var(--background-below);
+	border-style: solid;
+	background-color: var(--background-above);
+	font: inherit;
+	color: inherit;
+	padding-bottom: 0.5em;
+	padding-top: 0.5em;
+}
+button:hover {
+	background-color: var(--background);
+	cursor: pointer;
+}
+button:active {
+	background-color: var(--background-below);
+	color: var(--accent-color);
+	border-bottom: var(--border-width) solid var(--accent-color);
+}
+
+input[type=range] {
+	background: transparent;
+}
+input[type=range]::-moz-range-track {
+	border: var(--border-width) solid var(--background-below);
+	background-color: var(--accent-color);
+	height: 5px;
+}
+input[type=range]::-moz-range-thumb {
+	border: var(--border-width) solid var(--background-above);
+	background-color: var(--accent-color);
+	border-radius: 0;
+}
+
 
 .file {
 	/* custom file input modified from https://github.com/mdo/wtf-forms/ */
@@ -207,7 +245,7 @@ a:visited {
 	padding-bottom: 0.75em;
 	padding-top: 0.75em;
 
-	accent-color: #cba6f7;
+	accent-color: var(--accent-color);
 	background-color: var(--background-above);
 }
 
@@ -233,26 +271,6 @@ a:visited {
 	border: 1px;
 	color: inherit;
 	font-family: inherit;
-}
-
-button {
-	border: var(--border-width);
-	border-bottom: 6px;
-	border-color: var(--background-below);
-	border-style: solid;
-	background-color: var(--background-above);
-	font: inherit;
-	color: inherit;
-	padding-bottom: 0.5em;
-	padding-top: 0.5em;
-}
-button:hover {
-	background-color: var(--background);
-	cursor: pointer;
-}
-button:active {
-	background-color: var(--background-below);
-	color: #cba6f7;
 }
 
 footer {
@@ -288,7 +306,7 @@ footer {
 	padding-bottom: 0.75em;
 	padding-top: 0.75em;
 
-	accent-color: #cba6f7;
+	accent-color: var(--accent-color);
 	background-color: var(--background-above);
 }
 
