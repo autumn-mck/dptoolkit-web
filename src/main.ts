@@ -108,3 +108,17 @@ function exportButtonClicked() {
 
 	DatapackModifierInstance.applyChanges(datapackStore.getAll());
 }
+
+
+const collapsibles = document.getElementsByClassName("collapsible-button");
+for (const collapsible of collapsibles) {
+	(collapsible as HTMLButtonElement).addEventListener("click", () => {
+		collapsible.classList.toggle("toggled");
+
+		var content = collapsible.nextElementSibling;
+		if (content != null) {
+			if ((content as HTMLDivElement).style.display === "block") (content as HTMLDivElement).style.display = "none";
+			else (content as HTMLDivElement).style.display = "block";
+		}
+	});
+}

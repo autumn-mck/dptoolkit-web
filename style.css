@@ -87,6 +87,24 @@ a:visited {
 	align-content: stretch;
 }
 
+.list {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5em;
+	width: 100%;
+	align-items: stretch;
+	align-content: stretch;
+	justify-content: center;
+	justify-items: auto;
+	
+	> * {
+		width: 100%;
+	}
+	> .simple-widget + .simple-widget {
+		margin-top: 0.5em;
+	}
+}
+
 #left-col {
 	display: flex;
 	flex-direction: column;
@@ -214,4 +232,27 @@ footer {
 		margin-bottom: 0.05em;
 		height: 1.1em;
 	}
+}
+
+.collapsible-content {
+	display: none;
+}
+
+.simple-widget {
+	border: var(--border-width);
+	border-color: var(--background-below);
+	border-style: solid;
+
+	display: flex;
+	justify-content: space-between;
+	justify-items: stretch;
+	align-items: center;
+
+	padding-left: 1em;
+	padding-right: 1em;
+	padding-bottom: 0.75em;
+	padding-top: 0.75em;
+
+	accent-color: #cba6f7;
+	background-color: var(--background-above);
 }

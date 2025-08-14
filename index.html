@@ -18,7 +18,9 @@
 		</p>
 		<div class="edit_area">
 			<div class="work_area">
+				<!---------- LEFT COLUMN ---------->
 				<div id="left-col">
+					<!---------- IMPORT ---------->
 					<label class="file">
 						<input
 							type="file"
@@ -28,8 +30,26 @@
 							multiple />
 						<span class="file-custom"></span>
 					</label>
+					
+					<!---------- DATAPACK LIST ---------->
 					<div id="datapack-display"></div>
-					<button type="button" id="export-button">Export (test)</button>
+
+					<!---------- EXPORT SETTINGS ---------->
+					<div class="list">
+						<button type="button" class="collapsible-button" id="export-options-button">Export settings</button>
+						<div class="collapsible-content list">
+							<div class="simple-widget">
+								<label>Archive compression level</label>
+								<input type="range">
+							</div>
+							<div class="simple-widget">
+								<label>Export modified files only (developer)</label>
+								<input type="checkbox">
+							</div>
+						</div>
+					</div>
+					<button type="button" id="export-button" >Export datapack(s)...</button>
+					
 				</div>
 
 				<template id="datapack-template">
@@ -42,6 +62,7 @@
 					</div>
 				</template>
 
+				<!---------- RIGHT COLUMN ---------->
 				<form class="config-screen" id="config-screen">
 					<template id="text-widget-template">
 						<div class="widget text-widget">
