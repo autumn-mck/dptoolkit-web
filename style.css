@@ -205,5 +205,13 @@ button:hover {
 }
 button:active {
 	background-color: var(--background-below);
-	color:#cba6f7;
+	color: #cba6f7;
+}
+
+footer {
+	svg {
+		vertical-align: bottom;
+		margin-bottom: 0.05em;
+		height: 1.1em;
+	}
 }
