@@ -49,8 +49,11 @@ export async function loadDatapack(file: File): Promise<Datapack | string> {
 	let config = {};
 	if (modules.has(Modules.DPCONFIG)) config = await loadDpConfig(zip);
 
+	let pack_id = mcmeta.pack.id || file.name;
+	pack_id = pack_id + Math.round(Math.random()*100);
+
 	let new_pack: Datapack = {
-		id: mcmeta.pack.id || file.name,
+		id: pack_id,
 		name: mcmeta.pack.name,
 		description: mcmeta.pack.description,
 		icon: icon,
@@ -65,7 +68,7 @@ export async function loadDatapack(file: File): Promise<Datapack | string> {
 	await writeConfigWidgetsToPage(new_pack.instancedConfig, zip);
 	new_pack.instancedConfig.retrieveValuesFromPage();
 
-	console.log(new_pack.zip.files);
+	console.log(`Added new datapack with ID: ${pack_id}`);
 
 	return new_pack;
 }

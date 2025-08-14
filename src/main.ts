@@ -1,4 +1,5 @@
 import { type Datapack, loadDatapack } from "./datapack";
+import { DatapackModifierInstance } from "./datapack_changes";
 import { type DatapackStoreEvents, datapackStore } from "./datapackStore";
 import { getStructureSets } from "./structureSet";
 
@@ -104,4 +105,7 @@ function exportButtonClicked() {
 	datapackStore.getAll().forEach(datapack => {
 		datapack.instancedConfig?.apply();
 	});
+
+	DatapackModifierInstance.applyChanges();
+
 }

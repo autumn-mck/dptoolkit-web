@@ -26,6 +26,7 @@ export type DatapackChangeMethod =
 export class DatapackModifier {
 	private static instance: DatapackModifier;
 	private changeQueue: Array<DatapackChange>;
+	private changeCache: {[key: string]: string};
 
 	public static get Instance() {
 		return this.instance || (this.instance = new this());
@@ -33,6 +34,7 @@ export class DatapackModifier {
 
 	constructor() {
 		this.changeQueue = [];
+		this.changeCache = {};
 	}
 
 	/**
@@ -62,36 +64,107 @@ export class DatapackModifier {
 	}
 
 	public async applyChanges() {
-		this.changeQueue.forEach(change => {
-			this.applyChange(change);
-		});
+		console.time("Applying changes to packs...");
+
+		// Apply changes to files
+		for (const change of this.changeQueue) {
+			await this.applyChange(change);
+		}
+		// Cache with changes created -> write to zip
+		console.timeEnd("Applying changes to packs...");
+	}
+
+	//#region ///// FILE CACHE MANIPULATION /////
+
+	private cacheKey(datapack_id: string, file_path: string): string {
+		return `${datapack_id}:${file_path}`;
+	}
+
+	private addToCache(datapack_id: string, file_path: string, file: string, overwrite: boolean = false) {
+		if (overwrite == true) {
+			this.changeCache[this.cacheKey(datapack_id, file_path)] = file;
+		}
+		else {
+			if (this.isInCache(datapack_id, file_path)) {
+				throw new Error("Trying to overwrite a file in cache without overwrite permission");
+			}
+			else {
+				this.changeCache[this.cacheKey(datapack_id, file_path)] = file;
+			}
+		}
+	}
+
+	private isInCache(datapack_id: string, file_path: string) {
+		if (this.cacheKey(datapack_id, file_path) in this.changeCache) {
+			return true;
+		}
+		return false;
+	}
+
+	private retrieveFromCache(datapack_id: string, file_path: string) {
+		if (this.cacheKey(datapack_id, file_path) in this.changeCache) {
+			return this.changeCache[this.cacheKey(datapack_id, file_path)];
+		}
+		throw new Error("Trying to retrieve a file from cache that isn't there");
+	}
+	// #endregion
+
+	//#region ///// FILE MODIFICATIONS /////
+
+	private async applyChangeToFile(file_name: string, change: DatapackChange) {
+		let file_content: string;
+
+		if (this.isInCache(change.datapack.id, file_name)) {
+			file_content = this.retrieveFromCache(change.datapack.id, file_name);
+
+			let parsed = JSON.parse(file_content);
+
+			applyToValue(parsed, change.value_path, change.value, change.application_method);
+
+			const modified_content = JSON.stringify(parsed);
+
+			this.addToCache(change.datapack.id, file_name, modified_content, true);
+		}
+
+		else if (file_name in change.datapack.zip.files) {
+			file_content = await change.datapack.zip.files[file_name].async("text");
+
+			let parsed = JSON.parse(file_content);
+
+			applyToValue(parsed, change.value_path, change.value, change.application_method);
+
+			const modified_content = JSON.stringify(parsed);
+
+			this.addToCache(change.datapack.id, file_name, modified_content);
+		}
+
+		else {
+			console.warn(`File "${file_name}" doesn't exist in "${change.datapack.id}"!`);
+		}
 	}
 
 	private async applyChange(change: DatapackChange) {
 		if (change.file_path.startsWith("./")) {
 			const file_name = change.file_path.slice(2);
-			if (file_name in change.datapack.zip.files) {
-				const file_text_content = await change.datapack.zip.files[file_name].async("text");
-				const content_object = JSON.parse(file_text_content);
-				const a = JSON.stringify(applyToValue(
-					content_object,
-					change.value_path,
-					change.value,
-					change.application_method
-				));
-				console.log(a);
-				// to-do: uhhh rewrite the file? needs a copy or something
-				// maybe create a cache (probably a good idea)
-			}
-			else {
-				console.warn(`File "${file_name}" doesn't exist in "${change.datapack.id}"!`);
-			}
+			await this.applyChangeToFile(
+				file_name,
+				change
+			);
 		}
 		else {
-			// to-do: cycle through all files
+			const files_in_pack: string[] = Object.keys(change.datapack.zip.files);
+
+			for (const file_name of files_in_pack) {
+				if (file_name.endsWith(change.file_path)) {
+					await this.applyChangeToFile(
+						file_name,
+						change
+					);
+				}
+			}
 		}
 	}
-
+	// #endregion
 }
 
 export const DatapackModifierInstance = DatapackModifier.Instance;
