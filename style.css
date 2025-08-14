@@ -155,6 +155,8 @@ a:visited {
 
 	img {
 		border-radius: 0.5em;
+		border: var(--border-width) var(--background) solid;
+		height: 6rem;
 	}
 
 	.name {
@@ -167,6 +169,8 @@ a:visited {
 	}
 
 	.name-and-description {
+		line-height: 1.25;
+
 		padding-left: 1em;
 		align-items: stretch;
 		align-content: center;
