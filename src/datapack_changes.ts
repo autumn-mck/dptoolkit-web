@@ -64,7 +64,7 @@ export class DatapackModifier {
 		}
 	}
 
-	public async applyChanges() {
+	public async applyChanges(datapacks: ReadonlyArray<Datapack>) {
 		console.time("Applying changes to packs...");
 
 		// Apply changes to files
@@ -73,22 +73,19 @@ export class DatapackModifier {
 		}
 
 		// Cache with changes created -> write to zip
-		let packs: {[key: string]: JSZip} = {};
+		let packs: { [key: string]: JSZip } = {};
 
 		for (const file_path in this.changeCache) {
 			if (Object.prototype.hasOwnProperty.call(this.changeCache, file_path)) {
 				const pack_id = file_path.split(":")[0];
 
 				if (!(pack_id in packs)) {
-					packs[pack_id] = new JSZip();
+					const dpZip = datapacks.find((dp) => dp.id === pack_id)?.zip;
+					packs[pack_id] = dpZip!;
 				}
 
-				packs[pack_id].file(
-					file_path.split(":")[1],
-					this.changeCache[file_path]
-				);
-			}
-			else throw new Error("what");
+				packs[pack_id].file(file_path.split(":")[1], this.changeCache[file_path]);
+			} else throw new Error("what");
 		}
 
 		console.timeEnd("Applying changes to packs...");

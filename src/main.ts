@@ -102,10 +102,9 @@ exportButtonElement.addEventListener("click", exportButtonClicked, { passive: tr
 function exportButtonClicked() {
 	console.log("Export button clicked");
 
-	datapackStore.getAll().forEach(datapack => {
+	datapackStore.getAll().forEach((datapack) => {
 		datapack.instancedConfig?.apply();
 	});
 
-	DatapackModifierInstance.applyChanges();
-
+	DatapackModifierInstance.applyChanges(datapackStore.getAll());
 }
