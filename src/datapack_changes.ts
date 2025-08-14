@@ -1,3 +1,4 @@
+import JSZip from "jszip";
 import type { Datapack } from "./datapack";
 
 interface DatapackChange {
@@ -70,8 +71,46 @@ export class DatapackModifier {
 		for (const change of this.changeQueue) {
 			await this.applyChange(change);
 		}
+
 		// Cache with changes created -> write to zip
+		let packs: {[key: string]: JSZip} = {};
+
+		for (const file_path in this.changeCache) {
+			if (Object.prototype.hasOwnProperty.call(this.changeCache, file_path)) {
+				const pack_id = file_path.split(":")[0];
+
+				if (!(pack_id in packs)) {
+					packs[pack_id] = new JSZip();
+				}
+
+				packs[pack_id].file(
+					file_path.split(":")[1],
+					this.changeCache[file_path]
+				);
+			}
+			else throw new Error("what");
+		}
+
 		console.timeEnd("Applying changes to packs...");
+		for (const pack in packs) {
+			if (Object.prototype.hasOwnProperty.call(packs, pack)) {
+				const zip = packs[pack];
+				await this.saveFile(zip);
+			}
+		}
+	}
+
+	public async saveFile(zip: JSZip) {
+		await zip.generateAsync({type:"blob"}).then((content) => {
+			var link = document.createElement("a"), url = URL.createObjectURL(content);
+			link.href = url; link.download = `modified datapack test.zip`;
+			document.body.appendChild(link);
+			link.click();
+			setTimeout(function() {
+				document.body.removeChild(link);
+				window.URL.revokeObjectURL(url);  
+			}, 0); 
+		});
 	}
 
 	//#region ///// FILE CACHE MANIPULATION /////
