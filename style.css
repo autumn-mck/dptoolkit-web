@@ -4,6 +4,7 @@
 	--background: #181825;
 	--background-below: #11111b;
 	--background-above: #1e1e2e;
+	--background-above-above: #363a4f;
 
 	--border-width: 2px;
 }
@@ -14,10 +15,27 @@
 	box-sizing: border-box;
 }
 
-html {
+html,
+body {
 	font-family: "Inter", sans-serif;
 	color: whitesmoke;
 	background-color: var(--background-below);
+
+	margin: 0;
+	padding: 0;
+	font-size: 16px;
+	line-height: 1.5;
+
+	width: 100%;
+	height: 100%;
+}
+
+body {
+	padding: 0.5rem;
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+	align-items: center;
 }
 
 a:link {
@@ -33,6 +51,7 @@ a:visited {
 	display: inline-block;
 	cursor: pointer;
 	height: 3rem;
+	min-height: 3rem;
 
 	input {
 		min-width: 14rem;
@@ -75,12 +94,12 @@ a:visited {
 	}
 }
 
-.edit_area {
+.work_area {
 	background-color: var(--background);
 	padding: 1em;
-}
-
-.work_area {
+	width: 100%;
+	flex-grow: 1;
+	min-height: 0;
 	display: flex;
 	gap: 1em;
 	align-items: stretch;
@@ -96,7 +115,7 @@ a:visited {
 	align-content: stretch;
 	justify-content: center;
 	justify-items: auto;
-	
+
 	> * {
 		width: 100%;
 	}
@@ -122,6 +141,10 @@ a:visited {
 	display: flex;
 	flex-direction: column;
 	gap: 1em;
+
+	overflow-y: scroll;
+	scrollbar-color: var(--background-above-above) var(--background-below);
+	min-height: 0;
 }
 
 .datapack {
@@ -160,6 +183,8 @@ a:visited {
 	border: var(--border-width) solid var(--background-below);
 	width: 100%;
 	padding: 0em;
+	overflow-y: scroll;
+	scrollbar-color: var(--background-above-above) var(--background-below);
 }
 
 /* CONFIG WIDGETS AND STUFF */
@@ -227,10 +252,16 @@ button:active {
 }
 
 footer {
+	p {
+		margin: 0;
+	}
+
 	svg {
-		vertical-align: bottom;
-		margin-bottom: 0.05em;
+		display: inline-block;
+		vertical-align: middle;
 		height: 1.1em;
+		position: relative;
+		top: -0.1em;
 	}
 }
 
