@@ -356,3 +356,20 @@ svg.icon {
 	top: -0.1em;
 	margin: 0 0.25em;
 }
+
+.dropdown {
+	border: var(--border-width) solid var(--background-above-above);
+	background-color: var(--background-above);
+	display: flex;
+	flex-direction: column;
+	width: max-content;
+	padding: 0.5em 1em;
+	gap: 0.5em;
+	a {
+		color: inherit;
+		text-decoration: none;
+	}
+	svg.icon {
+		height: 1em;
+	}
+}
