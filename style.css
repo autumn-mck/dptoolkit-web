@@ -9,6 +9,8 @@
 	--accent-color: #cba6f7;
 
 	--border-width: 2px;
+
+	--ease-out-quint: cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 *,
@@ -381,33 +383,40 @@ svg.icon {
 }
 
 .switch {
+	--box-size: 1.5em;
+	--middle-gap: 0.25rem;
+
 	appearance: none;
 	position: relative;
 	display: inline-block;
 	box-sizing: content-box;
-	width: 4em;
-	height: 1.5em;
+	width: calc(var(--box-size) * 2 + var(--middle-gap));
+	height: var(--box-size);
 	padding: 2px;
 	border: none;
 	cursor: pointer;
 	overflow: hidden;
 	background-color: var(--background);
-	transition: background ease 0.3s;
+	transition: background var(--ease-out-quint) 0.1s;
 	border: var(--border-width) solid var(--background-below);
-}
-.switch:before {
-	content: "";
-	display: block;
-	position: absolute;
-	width: 1.5em;
-	height: 1.5em;
-	background: var(--background-above-above);
-	transition: transform linear 0.05s;
-}
-.switch:checked {
-	background-color: var(--accent-color);
-}
-.switch:checked:before {
-	transform: translateX(2.5em);
-	background: var(--background-above);
+	flex-shrink: 0;
+
+	&:checked {
+		background-color: var(--accent-color);
+	}
+
+	&:before {
+		content: "";
+		display: block;
+		position: absolute;
+		width: var(--box-size);
+		height: var(--box-size);
+		background: var(--background-above-above);
+		transition: transform var(--ease-out-quint) 0.1s;
+	}
+
+	&:checked:before {
+		transform: translateX(calc(var(--box-size) + var(--middle-gap)));
+		background: var(--background-above);
+	}
 }
