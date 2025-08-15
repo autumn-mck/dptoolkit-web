@@ -68,7 +68,7 @@ export async function loadDatapack(file: File): Promise<Datapack | string> {
 	await writeConfigWidgetsToPage(new_pack.instancedConfig, zip);
 	new_pack.instancedConfig.retrieveValuesFromPage();
 
-	console.log(`Added new datapack with ID: ${pack_id}`);
+	console.info(`Created new datapack with ID: ${pack_id}`);
 
 	return new_pack;
 }

@@ -66,7 +66,7 @@ export class DatapackModifier {
 	}
 
 	public async applyChanges(datapacks: ReadonlyArray<Datapack>, export_settings: ExportSettings) {
-		console.time("[DatapackModifier] Applying changes to packs");
+		console.time("[DatapackModifier] Applied changes to packs");
 
 		// Apply changes to files
 		for (const change of this.changeQueue) {
@@ -94,7 +94,7 @@ export class DatapackModifier {
 			} else throw new Error("what");
 		}
 
-		console.timeEnd("[DatapackModifier] Applying changes to packs");
+		console.timeEnd("[DatapackModifier] Applied changes to packs");
 		for (const pack in packs) {
 			if (Object.prototype.hasOwnProperty.call(packs, pack)) {
 				const zip = packs[pack];
@@ -104,7 +104,7 @@ export class DatapackModifier {
 	}
 
 	public async saveFile(zip: JSZip, export_settings: ExportSettings) {
-		console.log(`[DatapackModifier] Saving file... [${zip.name}]`);
+		console.info(`[DatapackModifier] Saving file... [${zip.name}]`);
 		await zip.generateAsync({
 			type: "blob",
 			compression: export_settings.compressionLevel == 0 ? "STORE" : "DEFLATE",
