@@ -184,7 +184,7 @@ input[type="range"]::-moz-range-thumb {
 	flex-direction: column;
 	gap: 1em;
 
-	overflow-y: scroll;
+	overflow-y: auto;
 	scrollbar-color: var(--background-above-above) var(--background-below);
 	min-height: 0;
 }
@@ -229,7 +229,7 @@ input[type="range"]::-moz-range-thumb {
 	border: var(--border-width) solid var(--background-below);
 	width: 100%;
 	padding: 0em;
-	overflow-y: scroll;
+	overflow-y: auto;
 	scrollbar-color: var(--background-above-above) var(--background-below);
 }
 
