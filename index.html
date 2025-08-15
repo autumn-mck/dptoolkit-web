@@ -12,13 +12,21 @@
 
 	<body>
 		<div class="header">
-			<p>Datapack Toolkit (indev)</p>
-			<p>
-				<a href="https://github.com/everloste/DatapackToolkit/wiki">
+			<div>
+				<p>Datapack Toolkit (indev)</p>
+			</div>
+			<div class="header-middle">
+				<p><a href="" id="config-screen-select">
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><!--!Font Awesome Free v7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path fill="#ffffff" d="M480 224C492.9 224 504.6 231.8 509.6 243.8C514.6 255.8 511.8 269.5 502.7 278.7L342.7 438.7C330.2 451.2 309.9 451.2 297.4 438.7L137.4 278.7C128.2 269.5 125.5 255.8 130.5 243.8C135.5 231.8 147.1 224 160 224L480 224z"/></svg>
+					Config
+				</a></p>
+			</div>
+			<div>
+				<p><a href="https://github.com/everloste/DatapackToolkit/wiki">
 					<svg style="margin-right: 0.25em;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36"><path fill="#C1694F" d="M35 26c0 2.209-1.791 4-4 4H5c-2.209 0-4-1.791-4-4V6.313C1 4.104 6.791 0 9 0h20.625C32.719 0 35 2.312 35 5.375V26z"/><path fill="#CCD6DD" d="M33 30c0 2.209-1.791 4-4 4H7c-2.209 0-4-1.791-4-4V6c0-4.119-.021-4 5-4h21c2.209 0 4 1.791 4 4v24z"/><path fill="#E1E8ED" d="M31 31c0 1.657-1.343 3-3 3H4c-1.657 0-3-1.343-3-3V7c0-1.657 1.343-3 3-3h24c1.657 0 3 1.343 3 3v24z"/><path fill="#C1694F" d="M31 32c0 2.209-1.791 4-4 4H6c-2.209 0-4-1.791-4-4V10c0-2.209 1.791-4 4-4h21c2.209 0 4 1.791 4 4v22z"/><path fill="#D99E82" d="M29 32c0 2.209-1.791 4-4 4H6c-2.209 0-4-1.791-4-4V12c0-2.209 1.791-4 4-4h19.335C27.544 8 29 9.456 29 11.665V32z"/><path fill="#C1694F" d="M6 6C4.312 6 4.269 4.078 5 3.25 5.832 2.309 7.125 2 9.438 2H11V0H8.281C4.312 0 1 2.5 1 5.375V32c0 2.209 1.791 4 4 4h2V6H6z"/><path fill="#E1E8ED" d="M25 18c0 1.104-.896 2-2 2H13c-1.104 0-2-.896-2-2v-2c0-1.104.896-2 2-2h10c1.104 0 2 .896 2 2v2z"/></svg>
 					Docs
-				</a>
-			</p>
+				</a></p>
+			</div>
 		</div>
 		<!-- <p>
 			Datapack Toolkit is a tool that streamlines custom worldgen configuration.
@@ -44,6 +52,7 @@
 				<!---------- EXPORT SETTINGS ---------->
 				<div class="list">
 					<button type="button" class="collapsible-button" id="export-options-button">
+						<svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><!--!Font Awesome Free v7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M259.1 73.5C262.1 58.7 275.2 48 290.4 48L350.2 48C365.4 48 378.5 58.7 381.5 73.5L396 143.5C410.1 149.5 423.3 157.2 435.3 166.3L503.1 143.8C517.5 139 533.3 145 540.9 158.2L570.8 210C578.4 223.2 575.7 239.8 564.3 249.9L511 297.3C511.9 304.7 512.3 312.3 512.3 320C512.3 327.7 511.8 335.3 511 342.7L564.4 390.2C575.8 400.3 578.4 417 570.9 430.1L541 481.9C533.4 495 517.6 501.1 503.2 496.3L435.4 473.8C423.3 482.9 410.1 490.5 396.1 496.6L381.7 566.5C378.6 581.4 365.5 592 350.4 592L290.6 592C275.4 592 262.3 581.3 259.3 566.5L244.9 496.6C230.8 490.6 217.7 482.9 205.6 473.8L137.5 496.3C123.1 501.1 107.3 495.1 99.7 481.9L69.8 430.1C62.2 416.9 64.9 400.3 76.3 390.2L129.7 342.7C128.8 335.3 128.4 327.7 128.4 320C128.4 312.3 128.9 304.7 129.7 297.3L76.3 249.8C64.9 239.7 62.3 223 69.8 209.9L99.7 158.1C107.3 144.9 123.1 138.9 137.5 143.7L205.3 166.2C217.4 157.1 230.6 149.5 244.6 143.4L259.1 73.5zM320.3 400C364.5 399.8 400.2 363.9 400 319.7C399.8 275.5 363.9 239.8 319.7 240C275.5 240.2 239.8 276.1 240 320.3C240.2 364.5 276.1 400.2 320.3 400z"/></svg>
 						Export settings
 					</button>
 					<div class="collapsible-content list">
@@ -57,7 +66,10 @@
 						</div>
 					</div>
 				</div>
-				<button type="button" id="export-button">Export datapack(s)...</button>
+				<button type="button" id="export-button">
+					<svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><!--!Font Awesome Free v7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M128.5 64C93.2 64 64.5 92.7 64.5 128L64.5 512C64.5 547.3 93.2 576 128.5 576L384.5 576C419.8 576 448.5 547.3 448.5 512L448.5 416L526.6 416L495.6 447C486.2 456.4 486.2 471.6 495.6 480.9C505 490.2 520.2 490.3 529.5 480.9L601.5 408.9C610.9 399.5 610.9 384.3 601.5 375L529.5 303C520.1 293.6 504.9 293.6 495.6 303C486.3 312.4 486.2 327.6 495.6 336.9L526.6 367.9L448.5 367.9L448.5 234.4C448.5 217.4 441.8 201.1 429.8 189.1L323.2 82.7C311.2 70.7 295 64 278 64L128.5 64zM390 240L296.5 240C283.2 240 272.5 229.3 272.5 216L272.5 122.5L390 240zM256.5 392C256.5 378.7 267.2 368 280.5 368L384.5 368L384.5 416L280.5 416C267.2 416 256.5 405.3 256.5 392z"/></svg>
+					Export datapack(s)...
+				</button>
 			</div>
 
 			<template id="datapack-template">
@@ -140,7 +152,6 @@
 				<a href="https://github.com/autumn-mck/dptoolkit-web/issues">Report issues</a> &nbsp;∗&nbsp;
 				Join the <a href="https://everloste.github.io/discord">Discord server</a> for other things
 				&nbsp;∗&nbsp;
-				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36"><path fill="#169B62" d="M4 5C1.791 5 0 6.791 0 9v18c0 2.209 1.791 4 4 4h8V5H4z"/><path fill="#EEE" d="M12 5h12v26H12z"/><path fill="#FF883E" d="M32 5h-8v26h8c2.209 0 4-1.791 4-4V9c0-2.209-1.791-4-4-4z"/></svg>
 				<svg viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
 					<path
 						fill="#5BCEFA"
