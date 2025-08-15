@@ -1,6 +1,7 @@
 import { type Datapack, loadDatapack } from "./datapack";
 import { DatapackModifierInstance } from "./datapack_changes";
 import { type DatapackStoreEvents, datapackStore } from "./datapackStore";
+import { getExportSettings } from "./page_interactions/settings";
 import { getStructureSets } from "./structureSet";
 
 const fileUploadElement = document.getElementById("input")!;
@@ -96,21 +97,10 @@ function sanitizeHtml(unsafe: string): string {
 	return div.innerHTML;
 }
 
-const exportButtonElement = document.getElementById("export-button")!;
-exportButtonElement.addEventListener("click", exportButtonClicked, { passive: true });
 
-function exportButtonClicked() {
-	console.log("Export button clicked");
-
-	datapackStore.getAll().forEach((datapack) => {
-		datapack.instancedConfig?.apply();
-	});
-
-	DatapackModifierInstance.applyChanges(datapackStore.getAll());
-}
-
-
+////////// EXPORT SETTINGS //////////
 const collapsibles = document.getElementsByClassName("collapsible-button");
+
 for (const collapsible of collapsibles) {
 	(collapsible as HTMLButtonElement).addEventListener("click", () => {
 		collapsible.classList.toggle("toggled");
@@ -121,4 +111,20 @@ for (const collapsible of collapsibles) {
 			else (content as HTMLDivElement).style.display = "block";
 		}
 	});
+}
+
+////////// EXPORT BUTTON //////////
+const exportButtonElement = document.getElementById("export-button")!;
+exportButtonElement.addEventListener("click", exportButtonClicked, { passive: true });
+
+function exportButtonClicked() {
+	console.log("Export button clicked");
+
+	const export_settings = getExportSettings();
+
+	datapackStore.getAll().forEach((datapack) => {
+		datapack.instancedConfig?.apply();
+	});
+
+	DatapackModifierInstance.applyChanges(datapackStore.getAll(), export_settings);
 }

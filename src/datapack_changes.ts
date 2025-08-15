@@ -1,5 +1,6 @@
 import JSZip from "jszip";
 import type { Datapack } from "./datapack";
+import type { ExportSettings } from "./types/settings";
 
 interface DatapackChange {
 	datapack: Datapack;
@@ -64,7 +65,7 @@ export class DatapackModifier {
 		}
 	}
 
-	public async applyChanges(datapacks: ReadonlyArray<Datapack>) {
+	public async applyChanges(datapacks: ReadonlyArray<Datapack>, export_settings: ExportSettings) {
 		console.time("Applying changes to packs...");
 
 		// Apply changes to files
@@ -80,8 +81,13 @@ export class DatapackModifier {
 				const pack_id = file_path.split(":")[0];
 
 				if (!(pack_id in packs)) {
-					const dpZip = datapacks.find((dp) => dp.id === pack_id)?.zip;
-					packs[pack_id] = dpZip!;
+					if (export_settings.modifiedOnly) {
+						packs[pack_id] = new JSZip();
+					}
+					else {
+						const dpZip = datapacks.find((dp) => dp.id === pack_id)?.zip;
+						packs[pack_id] = dpZip!;
+					}
 				}
 
 				packs[pack_id].file(file_path.split(":")[1], this.changeCache[file_path]);
@@ -92,13 +98,19 @@ export class DatapackModifier {
 		for (const pack in packs) {
 			if (Object.prototype.hasOwnProperty.call(packs, pack)) {
 				const zip = packs[pack];
-				await this.saveFile(zip);
+				await this.saveFile(zip, export_settings);
 			}
 		}
 	}
 
-	public async saveFile(zip: JSZip) {
-		await zip.generateAsync({type:"blob"}).then((content) => {
+	public async saveFile(zip: JSZip, export_settings: ExportSettings) {
+		await zip.generateAsync({
+			type: "blob",
+			compression: export_settings.compressionLevel == 0 ? "STORE" : "DEFLATE",
+			compressionOptions: {
+				level: export_settings.compressionLevel
+			}
+		}).then((content) => {
 			var link = document.createElement("a"), url = URL.createObjectURL(content);
 			link.href = url; link.download = `modified datapack test.zip`;
 			document.body.appendChild(link);
