@@ -49,7 +49,8 @@ a:visited {
 	color: #dec7fa;
 }
 
-button {
+button,
+.upload-button {
 	--button-height: 6px;
 
 	border: var(--border-width) solid var(--background-below);
@@ -91,7 +92,7 @@ input[type="range"]::-moz-range-thumb {
 	border-radius: 0;
 }
 
-.file {
+.upload-container {
 	/* custom file input modified from https://github.com/mdo/wtf-forms/ */
 	position: relative;
 	display: inline-block;
@@ -106,36 +107,30 @@ input[type="range"]::-moz-range-thumb {
 		opacity: 0;
 	}
 
-	.file-custom {
+	.upload-button {
 		position: absolute;
 		top: 0;
 		right: 0;
 		left: 0;
 		z-index: 5;
 		height: 3rem;
-		padding: 0.75rem 1.25rem;
 		line-height: 1.5;
-		background-color: var(--background);
-		border: var(--border-width) solid var(--background-below);
 		user-select: none;
+
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 0.3em;
 	}
 
-	.file-custom::before {
-		position: absolute;
-		top: calc(-1 * var(--border-width));
-		right: calc(-1 * var(--border-width));
-		bottom: calc(-1 * var(--border-width));
-		z-index: 6;
-		display: block;
-		content: "Browse";
-		height: 3rem;
-		padding: 0.75rem 1.25rem;
-		line-height: 1.5;
-		background-color: var(--background-above);
-		border: var(--border-width) solid var(--background-below);
+	.upload-button::before {
+		content: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="1.2rem" height="1.2rem" viewBox="0 0 640 640"><!--!Font Awesome Free v7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path fill="white" d="M352 128C352 110.3 337.7 96 320 96C302.3 96 288 110.3 288 128L288 288L128 288C110.3 288 96 302.3 96 320C96 337.7 110.3 352 128 352L288 352L288 512C288 529.7 302.3 544 320 544C337.7 544 352 529.7 352 512L352 352L512 352C529.7 352 544 337.7 544 320C544 302.3 529.7 288 512 288L352 288L352 128z"/></svg>');
+		display: flex;
+		align-items: center;
+		justify-content: center;
 	}
 
-	.file-custom::after {
+	.upload-button::after {
 		content: "Add datapack(s)...";
 	}
 }
