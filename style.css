@@ -231,6 +231,10 @@ input[type="range"]::-moz-range-thumb {
 	padding: 0em;
 	overflow-y: auto;
 	scrollbar-color: var(--background-above-above) var(--background-below);
+
+	img {
+		max-width: 100%;
+	}
 }
 
 /* CONFIG WIDGETS AND STUFF */
