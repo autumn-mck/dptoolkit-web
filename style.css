@@ -48,7 +48,7 @@ a:visited {
 }
 
 button {
-	--button-height: 7px;
+	--button-height: 6px;
 
 	border: var(--border-width) solid var(--background-below);
 	border-bottom-width: var(--button-height);
