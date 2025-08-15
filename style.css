@@ -373,3 +373,35 @@ svg.icon {
 		height: 1em;
 	}
 }
+
+.switch {
+	appearance: none;
+	position: relative;
+	display: inline-block;
+	box-sizing: content-box;
+	width: 4em;
+	height: 1.5em;
+	padding: 2px;
+	border: none;
+	cursor: pointer;
+	overflow: hidden;
+	background-color: var(--background);
+	transition: background ease 0.3s;
+	border: var(--border-width) solid var(--background-below);
+}
+.switch:before {
+	content: "";
+	display: block;
+	position: absolute;
+	width: 1.5em;
+	height: 1.5em;
+	background: var(--background-above-above);
+	transition: transform linear 0.05s;
+}
+.switch:checked {
+	background-color: var(--accent-color);
+}
+.switch:checked:before {
+	transform: translateX(2.5em);
+	background: var(--background-above);
+}

@@ -8,6 +8,8 @@ export function getExportSettings(): ExportSettings {
 	element = document.getElementById("setting-export-modified-only") as HTMLInputElement;
 	const export_modified_only: boolean = element.checked;
 
+	console.info(`Getting export settings...\n\tCompression level: ${archive_compression_level}\n\tExport modified only: ${export_modified_only}`);
+
 	return {
 		compressionLevel: archive_compression_level as CompressionLevel,
 		modifiedOnly: export_modified_only

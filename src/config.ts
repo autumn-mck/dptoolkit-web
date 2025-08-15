@@ -235,7 +235,7 @@ export class ConfigClass {
 				});
 
 				if (input_value === null) {
-					console.log(`Input value is null, so not applying method ${this.datapack_id}:${method_name}`);
+					console.log(`[DPConfig] Input value is null, so not applying method ${this.datapack_id}:${method_name}`);
 				}
 				else {
 					applyMethodAsChangeToPack(

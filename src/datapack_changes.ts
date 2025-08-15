@@ -58,15 +58,15 @@ export class DatapackModifier {
 				application_method: method
 			};
 			this.changeQueue.push(change);
-			console.log(`Queued change: \nDatapack: ${change.datapack.id}\nFiles: ${change.file_path}\nValue: ${change.value_path}\nValue: ${change.value}\nMethod: ${change.application_method}`);
+			console.log(`[DatapackModifier] Queued change: \nDatapack: ${change.datapack.id}\nFiles: ${change.file_path}\nValue: ${change.value_path}\nValue: ${change.value}\nMethod: ${change.application_method}`);
 		}
 		else {
-			console.warn(`Datapack change wasn't queued - value ${value} (type <${typeof value}>) doesn't match application method "${method}!"`);
+			console.warn(`[DatapackModifier] Datapack change wasn't queued - value ${value} (type <${typeof value}>) doesn't match application method "${method}!"`);
 		}
 	}
 
 	public async applyChanges(datapacks: ReadonlyArray<Datapack>, export_settings: ExportSettings) {
-		console.time("Applying changes to packs...");
+		console.time("[DatapackModifier] Applying changes to packs");
 
 		// Apply changes to files
 		for (const change of this.changeQueue) {
@@ -94,7 +94,7 @@ export class DatapackModifier {
 			} else throw new Error("what");
 		}
 
-		console.timeEnd("Applying changes to packs...");
+		console.timeEnd("[DatapackModifier] Applying changes to packs");
 		for (const pack in packs) {
 			if (Object.prototype.hasOwnProperty.call(packs, pack)) {
 				const zip = packs[pack];
@@ -104,6 +104,7 @@ export class DatapackModifier {
 	}
 
 	public async saveFile(zip: JSZip, export_settings: ExportSettings) {
+		console.log(`[DatapackModifier] Saving file... [${zip.name}]`);
 		await zip.generateAsync({
 			type: "blob",
 			compression: export_settings.compressionLevel == 0 ? "STORE" : "DEFLATE",
