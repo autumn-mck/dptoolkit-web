@@ -48,40 +48,46 @@ a:visited {
 }
 
 button {
-	border: var(--border-width);
-	border-bottom: 6px;
-	border-color: var(--background-below);
-	border-style: solid;
-	background-color: var(--background-above);
+	--button-height: 7px;
+
+	border: var(--border-width) solid var(--background-below);
+	border-bottom-width: var(--button-height);
+
 	font: inherit;
 	color: inherit;
+	background-color: var(--background-above);
+
 	padding-bottom: 0.5em;
 	padding-top: 0.5em;
-}
-button:hover {
-	background-color: var(--background);
-	cursor: pointer;
-}
-button:active {
-	background-color: var(--background-below);
-	color: var(--accent-color);
-	border-bottom: var(--border-width) solid var(--accent-color);
+
+	&:hover {
+		background-color: var(--background);
+		cursor: pointer;
+	}
+
+	&:active {
+		color: var(--accent-color);
+		background-color: var(--background-below);
+
+		border: var(--border-width) solid var(--background);
+		border-bottom-color: var(--accent-color);
+		margin-top: calc(var(--button-height) - var(--border-width));
+	}
 }
 
-input[type=range] {
+input[type="range"] {
 	background: transparent;
 }
-input[type=range]::-moz-range-track {
+input[type="range"]::-moz-range-track {
 	border: var(--border-width) solid var(--background-below);
 	background-color: var(--accent-color);
 	height: 5px;
 }
-input[type=range]::-moz-range-thumb {
+input[type="range"]::-moz-range-thumb {
 	border: var(--border-width) solid var(--background-above);
 	background-color: var(--accent-color);
 	border-radius: 0;
 }
-
 
 .file {
 	/* custom file input modified from https://github.com/mdo/wtf-forms/ */
