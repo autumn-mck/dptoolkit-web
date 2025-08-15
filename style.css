@@ -90,6 +90,7 @@ input[type="range"]::-moz-range-thumb {
 	border: var(--border-width) solid var(--background-above);
 	background-color: var(--accent-color);
 	border-radius: 0;
+	cursor: ew-resize;
 }
 
 .upload-container {
