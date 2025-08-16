@@ -81,16 +81,23 @@ export class DatapackModifier {
 				const pack_id = file_path.split(":")[0];
 
 				if (!(pack_id in packs)) {
-					if (export_settings.modifiedOnly) {
-						packs[pack_id] = new JSZip();
-					}
-					else {
-						const dpZip = datapacks.find((dp) => dp.id === pack_id)?.zip;
-						packs[pack_id] = dpZip!;
+					packs[pack_id] = new JSZip();
+
+					if (export_settings.modifiedOnly == false) {
+						const dpZip = datapacks.find((dp) => dp.id === pack_id)?.zip!;
+
+						for (const file_name in dpZip.files) {
+							if (file_name in dpZip.files) {
+								const file_content = await dpZip.files[file_name].async("base64");
+								packs[pack_id].file(file_name, file_content, {base64: true});
+							}
+						}
 					}
 				}
 
-				packs[pack_id].file(file_path.split(":")[1], this.changeCache[file_path]);
+				// Write changed file
+				packs[pack_id].file(file_path.split(":")[1], this.changeCache[file_path], {binary: false});
+
 			} else throw new Error("what");
 		}
 
@@ -101,6 +108,8 @@ export class DatapackModifier {
 				await this.saveFile(zip, export_settings);
 			}
 		}
+
+		this.wipeCache();
 	}
 
 	public async saveFile(zip: JSZip, export_settings: ExportSettings) {
@@ -156,6 +165,12 @@ export class DatapackModifier {
 		}
 		throw new Error("Trying to retrieve a file from cache that isn't there");
 	}
+
+	private wipeCache() {
+		this.changeCache = {};
+		console.info("[DatapackModifier] Change cache wiped.")
+	}
+
 	// #endregion
 
 	//#region ///// FILE MODIFICATIONS /////
