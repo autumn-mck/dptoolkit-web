@@ -1,6 +1,13 @@
 import JSZip from "jszip";
-import type { Datapack } from "./datapack";
-import type { ExportSettings } from "./types/settings";
+import type {Datapack} from "./datapack";
+import type {ExportSettings} from "./types/settings";
+import {
+    BooleanMethods,
+    type DatapackChangeMethod,
+    type DatapackChangeValue,
+    NumberMethods,
+    StringMethods
+} from "./types/modifications.ts";
 
 interface DatapackChange {
 	datapack: Datapack;
@@ -9,21 +16,6 @@ interface DatapackChange {
 	value: DatapackChangeValue;
 	application_method: DatapackChangeMethod;
 }
-
-export type DatapackChangeValue = string | number | boolean;
-
-export type DatapackChangeMethod =
-	  "multiply" 
-	| "divide"
-	| "add"
-	| "subtract"
-	| "set"
-	| "multiply_int"
-	| "divide_int"
-	| "add_int"
-	| "subtract_int"
-	| "remove"
-	| "pop";
 
 export class DatapackModifier {
 	private static instance: DatapackModifier;
@@ -256,29 +248,6 @@ export class DatapackModifier {
 
 export const DatapackModifierInstance = DatapackModifier.Instance;
 
-
-const StringMethods: ReadonlyArray<DatapackChangeMethod> = [
-	"add",
-	"pop",
-	"remove",
-	"set"
-];
-const NumberMethods: ReadonlyArray<DatapackChangeMethod> = [
-	"multiply",
-	"divide",
-	"add",
-	"subtract",
-	"set",
-	"multiply_int",
-	"divide_int",
-	"add_int",
-	"subtract_int",
-	"remove",
-	"pop"
-];
-const BooleanMethods: ReadonlyArray<DatapackChangeMethod> = [
-	"set"
-];
 
 function valueMatchesMethod(value: DatapackChangeValue, method: DatapackChangeMethod) {
 	if (typeof value === "string" && !StringMethods.includes(method)) {

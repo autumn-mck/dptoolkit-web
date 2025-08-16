@@ -1,88 +1,21 @@
 import JSZip from "jszip";
 import DOMPurify from "dompurify";
-import type { Datapack } from "./datapack";
-import { DatapackModifierInstance, type DatapackChangeMethod, type DatapackChangeValue } from "./datapack_changes";
-
-////////// WIDGET OBJECT DEFINITIONS //////////
-
-type TextWidget = {
-	type: "title" | "heading" | "text";
-	text: string;
-};
-
-type ImageWidget = {
-	type: "image";
-	file: string;
-	width?: number;
-	height?: number;
-};
-
-type NumberWidget = {
-	type: "number" | "value";
-	text: string;
-	method?: string;
-	methods?: Array<string>;
-	slots?: string | string[];
-
-	value: {
-		type: "int" | "percent" | "float";
-		default: number;			// v1 -> v2 change: default MUST be specified
-		range: [number, number];	// change: range MUST be specified
-		step?: number;
-		suffix?: string;
-		decimals?: number;
-	};
-
-	inputted_value: number;
-};
-
-type SliderWidget = {
-	type: "slider";
-	text: string;
-	method?: string;
-	methods?: Array<string>;
-	slots?: string | string[];
-
-	value: {
-		type: "int" | "percent" | "float";
-		default: number;			// v1 -> v2 change: default MUST be specified
-		range: [number, number];	// change: range MUST be specified
-		step?: number;
-	};
-
-	inputted_value: number;
-};
-
-type SwitchWidget = {
-	type: "switch";
-	text: string;
-	method?: string;
-	methods?: Array<string>;
-	slots?: string | string[];
-	
-	value: {
-		default: 1 | 0;				// v1 -> v2 change: default MUST be specified
-		enabled_text?: string;
-		disabled_text?: string;
-	};
-
-	inputted_value: boolean;
-};
-
-type InputWidgetDefinition = NumberWidget | SliderWidget | SwitchWidget;
-type WidgetDefinition = TextWidget | ImageWidget | NumberWidget | SliderWidget | SwitchWidget;
-
-const inputTypes: ReadonlyArray<string> = ["number", "value", "slider", "switch"];
-
-interface ConfigDefinition {
-	meta: {
-		ver: 1 | 2;
-		tab: string;
-		id: string;
-	};
-	widgets: Array<WidgetDefinition>;
-	methods: {[key: string]: Method};
-}
+import type {Datapack} from "./datapack";
+import {DatapackModifierInstance} from "./datapack_changes";
+import {
+    type Accessor,
+    AccessorMethods,
+    type ConfigDefinition,
+    inputTypes,
+    type InputWidgetDefinition,
+    type ConfigMethod,
+    type NumberWidget,
+    type SliderWidget,
+    type SwitchWidget,
+    type Transformer,
+    type WidgetDefinition
+} from "./types/config";
+import type {DatapackChangeMethod, DatapackChangeValue} from "./types/modifications.ts";
 
 export class ConfigClass {
 	datapack: Datapack;
@@ -292,30 +225,7 @@ function updateDisplayedValue(event: Event) {
 	}
 }
 
-
-////////// ACCESSOR LOGIC //////////
-
-type Accessor = {
-	method: string;
-	file_path: string | Array<string>;
-	value_path: string;
-};
-
-const AccessorMethods: ReadonlyArray<string> = [
-	"multiply",
-	"divide",
-	"add",
-	"subtract",
-	"set",
-	"multiply_int",
-	"divide_int",
-	"add_int",
-	"subtract_int",
-	"remove",
-	"pop"
-];
-
-///// ACCESSOR FUNCTIONS /////
+//////////////////// ACCESSOR LOGIC ////////////////////
 
 function readAccessors(accessor_list: Array<object>): Array<Accessor> {
 	let refined_accessor_list = accessor_list.map(
@@ -346,43 +256,7 @@ function accessorIsValid(accessor: object) {
 	return false;
 }
 
-// function findMatchingFiles(datapack: Datapack, file_path: string) {
-// 	let file_names: Array<string> = [];
-
-// 	for (const key in datapack.zip.files) {
-// 		if (Object.prototype.hasOwnProperty.call(datapack.zip.files, key)) {
-// 			if (key.includes(file_path)) {
-// 				file_names.push(key);
-// 			}
-// 		}
-// 	}
-// 	return file_names;
-// }
-
-
 ////////// TRANSFORMER LOGIC //////////
-
-type Transformer = string | number | ifElseTransformer | mathTransformerTwoArgs | mathTransformerSingleArg;
-
-type mathTransformerTwoArgs = {
-	function: "add" | "multiply";
-	argument: Transformer;
-	argument1: Transformer;
-}
-
-type mathTransformerSingleArg = {
-	function: "int" | "square" | "square_root";
-	argument: Transformer;
-}
-
-type ifElseTransformer = {
-	function: "if_else";
-	argument: Transformer;
-	argument1: Transformer;
-	operator: "==" | ">=" | ">";
-	true: Transformer;
-	false: Transformer;
-}
 
 function processTransformer(method_input: number | boolean | undefined, slot_values: {[key: string]: any}, transformer: Transformer): DatapackChangeValue {
 
@@ -455,12 +329,7 @@ function processTransformer(method_input: number | boolean | undefined, slot_val
 
 ////////// METHOD LOGIC //////////
 
-type Method = {
-	transformer: Transformer;
-	accessors: Array<Accessor>;
-}
-
-function applyMethodAsChangeToPack(datapack: Datapack, method: Method, method_input: any, slots: object) {
+function applyMethodAsChangeToPack(datapack: Datapack, method: ConfigMethod, method_input: any, slots: object) {
 	const final_value = processTransformer(
 		method_input,
 		slots,
