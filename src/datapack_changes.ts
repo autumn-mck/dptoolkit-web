@@ -84,8 +84,18 @@ export class DatapackModifier {
 				const pack_id = file_path.split(":")[0];
 
 				if (!(pack_id in packs)) {
-					packs[pack_id] = new JSZip();
+					// If packs are to combine, create one zip at the beginning of the object and refer all other pointers to it:
+					if (export_settings.combinePacks) {
+						if (Object.keys(packs).length == 0) packs[pack_id] = new JSZip();
+						else packs[pack_id] = packs[Object.keys(packs)[0]];
+					}
 
+					// Otherwise just create a new zip:
+					else {
+						packs[pack_id] = new JSZip();
+					}
+
+					// And if we ought to include unmodified files as well, we have to copy them over:
 					if (export_settings.modifiedOnly == false) {
 						const dpZip = datapacks.find((dp) => dp.id === pack_id)?.zip!;
 						progress_max += Object.keys(dpZip.files).length;
@@ -101,17 +111,23 @@ export class DatapackModifier {
 					}
 				}
 
-				// Write changed file
+				// Finally, write changed file:
 				packs[pack_id].file(file_path.split(":")[1], this.changeCache[file_path], {binary: false});
 
 			} else throw new Error("what");
 		}
 
 		console.timeEnd("[DatapackModifier] Applied changes to packs");
-		for (const pack in packs) {
-			if (Object.prototype.hasOwnProperty.call(packs, pack)) {
-				const zip = packs[pack];
-				await this.saveFile(zip, export_settings);
+
+		if (export_settings.combinePacks) {
+			await this.saveFile(packs[Object.keys(packs)[0]], export_settings);
+		}
+		else {
+			for (const pack in packs) {
+				if (Object.prototype.hasOwnProperty.call(packs, pack)) {
+					const zip = packs[pack];
+					await this.saveFile(zip, export_settings);
+				}
 			}
 		}
 
