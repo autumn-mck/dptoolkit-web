@@ -62,7 +62,7 @@ export class ConfigClass {
 						element.value.default == 0
 					);
 
-				} else if (type === "slider" || type === "number" || type === "value") {
+				} else if (type === "slider" || type === "number") {
 					const widgetValue = clone.querySelector(".widget-value-text") as HTMLElement | null;
 					if (element.value.default !== undefined) {
 						inputElement!.valueAsNumber = element.value.default;

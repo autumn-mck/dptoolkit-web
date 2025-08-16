@@ -14,7 +14,7 @@ export interface ConfigDefinition {
 
 export type InputWidgetDefinition = NumberWidget | SliderWidget | SwitchWidget;
 export type WidgetDefinition = TextWidget | ImageWidget | NumberWidget | SliderWidget | SwitchWidget;
-export const inputTypes: ReadonlyArray<string> = ["number", "value", "slider", "switch"];
+export const inputTypes: ReadonlyArray<string> = ["number", "slider", "switch"];
 
 type TextWidget = {
 	type: "title" | "heading" | "text";
@@ -24,12 +24,12 @@ type TextWidget = {
 type ImageWidget = {
 	type: "image";
 	file: string;
-	width?: number;
-	height?: number;
+	width?: string | number;
+	height?: string | number;
 };
 
 export type NumberWidget = {
-	type: "number" | "value";
+	type: "number";
 	text: string;
 	method?: string;
 	methods?: Array<string>;
