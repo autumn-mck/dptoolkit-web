@@ -123,6 +123,7 @@ export class DatapackModifier {
 		}).then((content) => {
 			var link = document.createElement("a"), url = URL.createObjectURL(content);
 			link.href = url; link.download = `modified datapack test.zip`;
+			link.hidden = true;
 			document.body.appendChild(link);
 			link.click();
 			setTimeout(function() {
