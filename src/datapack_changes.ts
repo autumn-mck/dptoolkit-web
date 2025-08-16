@@ -120,13 +120,13 @@ export class DatapackModifier {
 		console.timeEnd("[DatapackModifier] Applied changes to packs");
 
 		if (export_settings.combinePacks) {
-			await this.saveFile(packs[Object.keys(packs)[0]], export_settings);
+			await this.saveFile(packs[Object.keys(packs)[0]], export_settings, "Combined Pack.zip");
 		}
 		else {
 			for (const pack in packs) {
 				if (Object.prototype.hasOwnProperty.call(packs, pack)) {
 					const zip = packs[pack];
-					await this.saveFile(zip, export_settings);
+					await this.saveFile(zip, export_settings, datapacks.find((dp) => dp.id === pack)?.file_name!);
 				}
 			}
 		}
@@ -134,7 +134,7 @@ export class DatapackModifier {
 		this.wipeCache();
 	}
 
-	public async saveFile(zip: JSZip, export_settings: ExportSettings) {
+	public async saveFile(zip: JSZip, export_settings: ExportSettings, file_name: string) {
 		console.info(`[DatapackModifier] Saving file... [${zip.name}]`);
 		await zip.generateAsync({
 			type: "blob",
@@ -144,7 +144,7 @@ export class DatapackModifier {
 			}
 		}).then((content) => {
 			var link = document.createElement("a"), url = URL.createObjectURL(content);
-			link.href = url; link.download = `modified datapack test.zip`;
+			link.href = url; link.download = `Modded copy of ${file_name}`;
 			link.hidden = true;
 			document.body.appendChild(link);
 			link.click();

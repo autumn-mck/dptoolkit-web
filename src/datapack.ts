@@ -2,6 +2,7 @@ import JSZip from "jszip";
 import { ConfigClass } from "./config";
 
 export interface Datapack {
+	file_name: string;
 	id: string;
 	name: string | undefined;
 	description:
@@ -53,6 +54,7 @@ export async function loadDatapack(file: File): Promise<Datapack | string> {
 	pack_id = pack_id + Math.round(Math.random()*100);
 
 	let new_pack: Datapack = {
+		file_name: file.name,
 		id: pack_id,
 		name: mcmeta.pack.name,
 		description: mcmeta.pack.description,
