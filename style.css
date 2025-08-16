@@ -297,10 +297,18 @@ input[type="range"]::-moz-range-thumb {
 }
 
 footer {
+	display: flex;
+	width: 100%;
+	flex-direction: row;
+	justify-content: space-between;
+	align-content: center;
+	align-items: center;
+	justify-content: center;
+
 	p {
 		margin: 0;
+		text-align: center;
 	}
-
 	svg {
 		display: inline-block;
 		vertical-align: middle;

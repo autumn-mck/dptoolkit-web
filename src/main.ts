@@ -115,6 +115,7 @@ exportButtonElement.addEventListener("click", exportButtonClicked, { passive: tr
 
 function exportButtonClicked() {
 	console.info("Datapack export beginning...");
+	document.getElementById("progress-indicator")!.hidden = false;
 
 	const export_settings = getExportSettings();
 
@@ -122,5 +123,7 @@ function exportButtonClicked() {
 		datapack.instancedConfig?.apply();
 	});
 
-	DatapackModifierInstance.applyChanges(datapackStore.getAll(), export_settings);
+	DatapackModifierInstance.applyChanges(datapackStore.getAll(), export_settings).then(
+		() => {document.getElementById("progress-indicator")!.hidden = true;}
+	);
 }
