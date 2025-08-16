@@ -354,9 +354,7 @@ function applyToValue(json: {[key: string]: any}, value_path: string, value: Dat
 
 			case "remove":
 				let a = json[last_key] as Array<any>;
-				a = a.filter(
-					(element) => {element != value}
-				);
+				a = a.filter((element) => element != value);
 				json[last_key] = a;
 				break;
 
