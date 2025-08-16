@@ -21,6 +21,7 @@ type NumberWidget = {
 	type: "number" | "value";
 	text: string;
 	method?: string;
+	methods?: Array<string>;
 	slots?: string | string[];
 
 	value: {
@@ -39,6 +40,7 @@ type SliderWidget = {
 	type: "slider";
 	text: string;
 	method?: string;
+	methods?: Array<string>;
 	slots?: string | string[];
 
 	value: {
@@ -55,6 +57,7 @@ type SwitchWidget = {
 	type: "switch";
 	text: string;
 	method?: string;
+	methods?: Array<string>;
 	slots?: string | string[];
 	
 	value: {
@@ -216,6 +219,11 @@ export class ConfigClass {
 							// Method input
 							if ("method" in widget) {
 								if (widget.method == method_name) {
+									input_value = val;
+								}
+							}
+							else if ("methods" in widget) {
+								if (widget.methods?.includes(method_name)) {
 									input_value = val;
 								}
 							}
