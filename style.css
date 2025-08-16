@@ -280,6 +280,21 @@ input[type="range"]::-moz-range-thumb {
 	color: inherit;
 	font-family: inherit;
 }
+.text-widget {
+	padding-top: 0.25em;
+	padding-bottom: 0.25em;
+	line-height: 1.25;
+}
+.heading-widget {
+	padding-top: 0.25em;
+	padding-bottom: 0.25em;
+	line-height: 1.25;
+}
+.title-widget {
+	padding-top: 0.25em;
+	padding-bottom: 0.25em;
+	line-height: 1.25;
+}
 
 footer {
 	p {

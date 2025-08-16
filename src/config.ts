@@ -1,4 +1,5 @@
 import JSZip from "jszip";
+import DOMPurify from "dompurify";
 import type { Datapack } from "./datapack";
 import { DatapackModifierInstance, type DatapackChangeMethod, type DatapackChangeValue } from "./datapack_changes";
 
@@ -114,8 +115,11 @@ export class ConfigClass {
 
 				const widgetText = clone.querySelector(".widget-text") as HTMLElement | null;
 				const inputElement = clone.querySelector(".widget-input") as HTMLInputElement | null;
-
-				if ("text" in element && widgetText) widgetText.innerText = element.text;
+				
+				if ("text" in element && widgetText) {
+					const sanitized_html = DOMPurify.sanitize(element.text);
+					widgetText.innerHTML = sanitized_html;
+				}
 
 				if (type === "switch") {
 					(clone.querySelector(".widget-switch-input") as HTMLInputElement).checked = !(
