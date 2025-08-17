@@ -3,7 +3,10 @@ import type { CompressionLevel, ExportSettings } from "../types/settings";
 export function getExportSettings(): ExportSettings {
 	let element = document.getElementById("setting-archive-compression-level") as HTMLInputElement;
 	let archive_compression_level = element.valueAsNumber;
-	if (Number.isNaN(archive_compression_level)) archive_compression_level = 0;
+	if (Number.isNaN(archive_compression_level)) {
+		archive_compression_level = 6;
+		console.warn("Could not get setting for archive compression level");
+	}
 
 	element = document.getElementById("setting-export-modified-only") as HTMLInputElement;
 	const export_modified_only = element.checked;
@@ -12,7 +15,10 @@ export function getExportSettings(): ExportSettings {
 	const combine = element.checked;
 
 	console.info(
-		`Getting export settings...\n\tCompression level: ${archive_compression_level}\n\tExport modified only: ${export_modified_only}\n\tCombine: ${combine}`
+		`Getting export settings...
+	Compression level: ${archive_compression_level}
+	Export modified only: ${export_modified_only}
+	Combine: ${combine}`
 	);
 
 	return {
