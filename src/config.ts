@@ -34,7 +34,7 @@ export class ConfigClass {
 		return this.widgets;
 	}
 
-	public async getWidgetsHtml(zip: JSZip) {
+	public async createWidgetsHtml(zip: JSZip) {
 		let htmlWidgets = await Promise.all(
 			this.widgets.map(async (element, index) => {
 				const type = element.type;
@@ -53,15 +53,14 @@ export class ConfigClass {
 				const inputElement = clone.querySelector(".widget-input") as HTMLInputElement | null;
 
 				if ("text" in element && widgetText) {
-					const sanitized_html = DOMPurify.sanitize(element.text);
-					widgetText.innerHTML = sanitized_html;
+					widgetText.innerHTML = DOMPurify.sanitize(element.text);
 				}
 
 				if (type === "switch") {
-					(clone.querySelector(".widget-switch-input") as HTMLInputElement).checked = !(
-						element.value.default == 0
-					);
-				} else if (type === "slider" || type === "number") {
+					(clone.querySelector(".widget-switch-input") as HTMLInputElement).checked = element.value.default;
+				}
+				
+				else if (type === "slider" || type === "number") {
 					const widgetValue = clone.querySelector(".widget-value-text") as HTMLElement | null;
 					if (element.value.default !== undefined) {
 						inputElement!.valueAsNumber = element.value.default;
@@ -81,7 +80,9 @@ export class ConfigClass {
 					}
 
 					inputElement!.addEventListener("input", updateDisplayedValue);
-				} else if (type === "image") {
+				}
+				
+				else if (type === "image") {
 					const imageFile = await zip.file(element.file)?.async("blob");
 					if (imageFile) {
 						(clone.querySelector(".widget-image") as HTMLImageElement).src =

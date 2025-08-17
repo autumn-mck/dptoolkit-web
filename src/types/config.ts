@@ -72,7 +72,7 @@ export type SwitchWidget = {
 	slots?: string | string[];
 
 	value: {
-		default: 1 | 0;
+		default: true | false;
 	};
 
 	inputted_value: boolean; // technical, must not be in JSON definition
