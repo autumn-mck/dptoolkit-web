@@ -61,10 +61,12 @@ export class DatapackModifier {
 		console.time("[DatapackModifier] Applied changes to packs");
 		let progress = 0; let progress_max = Object.keys(this.changeQueue).length;
 
+		const progressIndicator = document.getElementById("progress-indicator-percentage")!;
+
 		// Apply changes to files
 		for (const change of this.changeQueue) {
 			await this.applyChange(change).then(
-				() => {progress++; document.getElementById("progress-indicator-percentage")!.innerText = Math.round(progress / progress_max * 100).toString();}
+				() => {progress++; progressIndicator.innerText = Math.round(progress / progress_max * 100).toString();}
 			);
 		}
 
@@ -94,10 +96,10 @@ export class DatapackModifier {
 
 						for (const file_name in dpZip.files) {
 							if (file_name in dpZip.files) {
-								const file_content = await dpZip.files[file_name].async("base64").then(
-									() => {progress++; document.getElementById("progress-indicator-percentage")!.innerText = Math.round(progress / progress_max * 100).toString();}
-								);
-								packs[pack_id].file(file_name, file_content, {base64: true});
+								const file_content = await dpZip.files[file_name].async("blob");
+								progress++;
+								progressIndicator.innerText = Math.round(progress / progress_max * 100).toString();
+								packs[pack_id].file(file_name, file_content, {binary: true});
 							}
 						}
 					}
