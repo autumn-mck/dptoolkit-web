@@ -80,7 +80,7 @@ export type SwitchWidget = {
 
 // CONFIG METHOD
 export type ConfigMethod = {
-    transformer: Transformer;
+    value: Transformer;
     accessors: Array<Accessor>;
 }
     // ACCESSOR
@@ -88,7 +88,7 @@ export type ConfigMethod = {
         method: DatapackChangeMethod;
         file_path: string | Array<string>;
         value_path: string;
-		transformer?: Transformer;
+		value?: Transformer;
     };
     export const AccessorMethods: ReadonlyArray<string> = DatapackChangeMethods;
 
