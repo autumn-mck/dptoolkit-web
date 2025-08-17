@@ -63,9 +63,9 @@ function getNameAndDescription(mcmeta: any): { name: string; description: string
 	let description = descriptionToDisplayable(mcmeta.pack.description);
 
 	if (!name) {
-		const splitDescription = description.split("\n");
+		const splitDescription = description.split("<br>");
 		name = splitDescription[0];
-		description = splitDescription.slice(1).join("\n");
+		description = splitDescription.slice(1).join("<br>");
 	} else {
 		name = sanitizeHtml(name);
 	}
@@ -73,9 +73,7 @@ function getNameAndDescription(mcmeta: any): { name: string; description: string
 	// strip colour codes from the name, both easier and more readable
 	name = name.replace(/§./g, "");
 
-	if (!description) {
-		description = "No description available";
-	}
+	if (!description) description = "";
 
 	return { name, description };
 }
