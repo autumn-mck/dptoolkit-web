@@ -2,6 +2,7 @@ import JSZip from "jszip";
 import DOMPurify from "dompurify";
 import type {Datapack} from "./datapack";
 import {DatapackModifierInstance} from "./datapack_changes";
+import type {DatapackChangeMethod, DatapackChangeValue} from "./types/modifications.ts";
 import {
     type Accessor,
     AccessorMethods,
@@ -15,7 +16,7 @@ import {
     type Transformer,
     type WidgetDefinition
 } from "./types/config";
-import type {DatapackChangeMethod, DatapackChangeValue} from "./types/modifications.ts";
+
 
 export class ConfigClass {
 	datapack: Datapack;
@@ -36,8 +37,8 @@ export class ConfigClass {
 
 	public async createWidgetsHtml(zip: JSZip) {
 		let htmlWidgets = await Promise.all(
-			this.widgets.map(async (element, index) => {
-				const type = element.type;
+			this.widgets.map(async (widget_object, index) => {
+				const type = widget_object.type;
 
 				// Create the thing
 				const templateId = `${type}-widget-template`;
@@ -52,41 +53,49 @@ export class ConfigClass {
 				const widgetText = clone.querySelector(".widget-text") as HTMLElement | null;
 				const inputElement = clone.querySelector(".widget-input") as HTMLInputElement | null;
 
-				if ("text" in element && widgetText) {
-					widgetText.innerHTML = DOMPurify.sanitize(element.text);
+				if ("text" in widget_object && widgetText) {
+					widgetText.innerHTML = DOMPurify.sanitize(widget_object.text);
 				}
 
 				if (type === "switch") {
-					(clone.querySelector(".widget-switch-input") as HTMLInputElement).checked = element.value.default;
+					(clone.querySelector(".widget-switch-input") as HTMLInputElement).checked = widget_object.value.default;
 				}
 				
 				else if (type === "slider" || type === "number") {
 					const widgetValue = clone.querySelector(".widget-value-text") as HTMLElement | null;
-					if (element.value.default !== undefined) {
-						inputElement!.valueAsNumber = element.value.default;
 
-						const suffix = getElementSuffix(element);
+					if (widget_object.value.default !== undefined) {
+						inputElement!.valueAsNumber = widget_object.value.default;
+
+						const suffix = getElementSuffix(widget_object);
 						if (widgetValue) {
-							widgetValue.innerText = element.value.default.toString() + suffix;
+							widgetValue.innerText = widget_object.value.default.toString() + suffix;
 							widgetValue.dataset.suffix = suffix;
 						}
 					}
-					if (element.value.range) {
-						inputElement!.min = element.value.range[0].toString();
-						inputElement!.max = element.value.range[1].toString();
+
+					if (widget_object.value.range) {
+						inputElement!.min = widget_object.value.range[0].toString();
+						inputElement!.max = widget_object.value.range[1].toString();
 					}
-					if (element.value.step) {
-						inputElement!.step = element.value.step.toString();
+
+					if (widget_object.value.step) {
+						inputElement!.step = widget_object.value.step.toString();
 					}
 
 					inputElement!.addEventListener("input", updateDisplayedValue);
 				}
 				
 				else if (type === "image") {
-					const imageFile = await zip.file(element.file)?.async("blob");
+					const imageFile = await zip.file(widget_object.file)?.async("blob");
+
 					if (imageFile) {
-						(clone.querySelector(".widget-image") as HTMLImageElement).src =
-							URL.createObjectURL(imageFile);
+						let img = (clone.querySelector(".widget-image") as HTMLImageElement);
+
+						img.src = URL.createObjectURL(imageFile);
+
+						if (widget_object.width) img.style = `width: ${typeof widget_object.width === "string" ? widget_object.width : widget_object.width.toString() + "px"};`;
+						else if (widget_object.height) img.style = `height: ${typeof widget_object.height === "string" ? widget_object.height : widget_object.height.toString() + "px"};`;
 					}
 				}
 
