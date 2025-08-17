@@ -120,6 +120,8 @@ input[type="range"]::-moz-range-thumb {
 	background-color: var(--accent-color);
 	border-radius: 0;
 	cursor: ew-resize;
+	height: 1rem;
+	width: 1rem;
 }
 
 .upload-container {
