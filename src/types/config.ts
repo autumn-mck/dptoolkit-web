@@ -37,14 +37,14 @@ export type NumberWidget = {
 
 	value: {
 		type: "int" | "percent" | "float";
-		default: number; // v1 -> v2 change: default MUST be specified
-		range: [number, number]; // change: range MUST be specified
+		default: number;
+		range: [number, number];
 		step?: number;
 		suffix?: string;
 		decimals?: number;
 	};
 
-	inputted_value: number;
+	inputted_value: number; // technical, must not be in JSON definition
 };
 
 export type SliderWidget = {
@@ -55,13 +55,13 @@ export type SliderWidget = {
 	slots?: string | string[];
 
 	value: {
-		type: "int" | "percent" | "float";
-		default: number; // v1 -> v2 change: default MUST be specified
-		range: [number, number]; // change: range MUST be specified
+		type: "int" | "percent";
+		default: number;
+		range: [number, number];
 		step?: number;
 	};
 
-	inputted_value: number;
+	inputted_value: number; // technical, must not be in JSON definition
 };
 
 export type SwitchWidget = {
@@ -72,12 +72,10 @@ export type SwitchWidget = {
 	slots?: string | string[];
 
 	value: {
-		default: 1 | 0; // v1 -> v2 change: default MUST be specified
-		enabled_text?: string;
-		disabled_text?: string;
+		default: 1 | 0;
 	};
 
-	inputted_value: boolean;
+	inputted_value: boolean; // technical, must not be in JSON definition
 };
 
 // CONFIG METHOD
