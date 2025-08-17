@@ -88,6 +88,7 @@ export type ConfigMethod = {
         method: DatapackChangeMethod;
         file_path: string | Array<string>;
         value_path: string;
+		transformer?: Transformer;
     };
     export const AccessorMethods: ReadonlyArray<string> = DatapackChangeMethods;
 

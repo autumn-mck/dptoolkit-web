@@ -344,7 +344,7 @@ function processTransformer(method_input: number | boolean | undefined, slot_val
 ////////// METHOD LOGIC //////////
 
 function applyMethodAsChangeToPack(datapack: Datapack, method: ConfigMethod, method_input: any, slots: object) {
-	const final_value = processTransformer(
+	const method_final_value = processTransformer(
 		method_input,
 		slots,
 		method.transformer
@@ -352,7 +352,12 @@ function applyMethodAsChangeToPack(datapack: Datapack, method: ConfigMethod, met
 	const accessors = readAccessors(
 		method.accessors
 	);
+
 	accessors.forEach(accessor => {
+		let final_value = method_final_value;
+		if ("transformer" in accessor) {
+			final_value = processTransformer(method_input, slots, accessor.transformer!);
+		}
 		if (typeof accessor.file_path === "string") {
 			DatapackModifierInstance.queueChange(
 				datapack, accessor.file_path, accessor.value_path, final_value, accessor.method as DatapackChangeMethod
