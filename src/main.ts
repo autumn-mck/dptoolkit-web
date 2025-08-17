@@ -3,6 +3,7 @@ import { DatapackModifierInstance } from "./datapack_changes";
 import { type DatapackStoreEvents, datapackStore } from "./datapackStore";
 import { getExportSettings } from "./page_interactions/settings";
 import { getStructureSets } from "./structureSet";
+import { showIntroIfNotShown } from "./page_interactions/introDialog";
 
 const fileUploadElement = document.getElementById("input")!;
 fileUploadElement.addEventListener("change", onFileUploaded, { passive: true });
@@ -93,7 +94,6 @@ function sanitizeHtml(unsafe: string): string {
 	return div.innerHTML;
 }
 
-
 ////////// EXPORT SETTINGS //////////
 const collapsibles = document.getElementsByClassName("collapsible-button");
 
@@ -103,7 +103,8 @@ for (const collapsible of collapsibles) {
 
 		var content = collapsible.nextElementSibling;
 		if (content != null) {
-			if ((content as HTMLDivElement).style.display === "block") (content as HTMLDivElement).style.display = "none";
+			if ((content as HTMLDivElement).style.display === "block")
+				(content as HTMLDivElement).style.display = "none";
 			else (content as HTMLDivElement).style.display = "block";
 		}
 	});
@@ -123,7 +124,9 @@ function exportButtonClicked() {
 		datapack.instancedConfig?.apply();
 	});
 
-	DatapackModifierInstance.applyChanges(datapackStore.getAll(), export_settings).then(
-		() => {document.getElementById("progress-indicator")!.hidden = true;}
-	);
+	DatapackModifierInstance.applyChanges(datapackStore.getAll(), export_settings).then(() => {
+		document.getElementById("progress-indicator")!.hidden = true;
+	});
 }
+
+showIntroIfNotShown();
