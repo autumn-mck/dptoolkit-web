@@ -51,7 +51,7 @@ export class ConfigClass {
 
 				const widgetText = clone.querySelector(".widget-text") as HTMLElement | null;
 				const inputElement = clone.querySelector(".widget-input") as HTMLInputElement | null;
-				
+
 				if ("text" in element && widgetText) {
 					const sanitized_html = DOMPurify.sanitize(element.text);
 					widgetText.innerHTML = sanitized_html;
@@ -61,7 +61,6 @@ export class ConfigClass {
 					(clone.querySelector(".widget-switch-input") as HTMLInputElement).checked = !(
 						element.value.default == 0
 					);
-
 				} else if (type === "slider" || type === "number") {
 					const widgetValue = clone.querySelector(".widget-value-text") as HTMLElement | null;
 					if (element.value.default !== undefined) {
@@ -82,7 +81,6 @@ export class ConfigClass {
 					}
 
 					inputElement!.addEventListener("input", updateDisplayedValue);
-
 				} else if (type === "image") {
 					const imageFile = await zip.file(element.file)?.async("blob");
 					if (imageFile) {
@@ -92,7 +90,13 @@ export class ConfigClass {
 				}
 
 				// Set input ID
-				if (inputElement) inputElement.id = "widget-input-" + this.datapack_id.toString() + index.toString();
+				if (inputElement) {
+					const id = "widget-input-" + this.datapack_id.toString() + index.toString();
+					const label = clone.querySelector("label") as HTMLLabelElement;
+
+					inputElement.id = id;
+					label.setAttribute("for", id);
+				}
 
 				return clone;
 			})
@@ -261,7 +265,7 @@ function accessorIsValid(accessor: object) {
 function processTransformer(method_input: number | boolean | undefined, slot_values: {[key: string]: any}, transformer: Transformer): DatapackChangeValue {
 
 	if (typeof transformer === "number") {
-		return transformer as number;
+		return transformer;
 	}
 
 	else if (typeof transformer === "string") {

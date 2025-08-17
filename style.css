@@ -46,7 +46,7 @@ a:link {
 	color: var(--accent-color);
 }
 a:visited {
-	color: #dec7fa;
+	color: var(--accent-color);
 }
 
 button,

@@ -124,7 +124,7 @@
 					</button>
 					<div class="collapsible-content list">
 						<div class="simple-widget">
-							<label>Archive compression level</label>
+							<label for="setting-archive-compression-level">Archive compression level</label>
 							<input
 								type="range"
 								id="setting-archive-compression-level"
@@ -134,11 +134,13 @@
 								value="6" />
 						</div>
 						<div class="simple-widget">
-							<label>Export modified files only (developer)</label>
+							<label for="setting-export-modified-only"
+								>Export modified files only (developer)</label
+							>
 							<input type="checkbox" id="setting-export-modified-only" class="switch" />
 						</div>
 						<div class="simple-widget">
-							<label>Combine packs (experimental!)</label>
+							<label for="setting-combine-packs">Combine packs (experimental!)</label>
 							<input type="checkbox" id="setting-combine-packs" class="switch" />
 						</div>
 					</div>
@@ -155,7 +157,7 @@
 
 			<template id="datapack-template">
 				<div class="datapack">
-					<img />
+					<img alt="" />
 					<div class="name-and-description">
 						<h3 class="name"></h3>
 						<p class="description"></p>
@@ -185,7 +187,7 @@
 
 				<template id="image-widget-template">
 					<div class="widget image-widget">
-						<img src="" class="widget-image" />
+						<img src="" class="widget-image" alt="" />
 					</div>
 				</template>
 
@@ -239,6 +241,11 @@
 				<a href="https://github.com/autumn-mck/dptoolkit-web/issues">Report issues</a> &nbsp;∗&nbsp;
 				<a href="https://everloste.github.io/discord">Discord server</a>
 				&nbsp;∗&nbsp;
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36">
+					<path fill="#169B62" d="M4 5C1.791 5 0 6.791 0 9v18c0 2.209 1.791 4 4 4h8V5H4z" />
+					<path fill="#EEE" d="M12 5h12v26H12z" />
+					<path fill="#FF883E" d="M32 5h-8v26h8c2.209 0 4-1.791 4-4V9c0-2.209-1.791-4-4-4z" />
+				</svg>
 				<svg viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
 					<path
 						fill="#5BCEFA"
