@@ -85,7 +85,7 @@ export class ConfigClass {
 
 					inputElement!.addEventListener("input", updateDisplayedValue);
 				}
-				
+
 				else if (type === "image") {
 					const imageFile = await zip.file(widget_object.file)?.async("blob");
 
@@ -94,8 +94,8 @@ export class ConfigClass {
 
 						img.src = URL.createObjectURL(imageFile);
 
-						if (widget_object.width) img.style = `max-width: ${typeof widget_object.width === "string" ? widget_object.width : widget_object.width.toString() + "px"};`;
-						else if (widget_object.height) img.style = `max-height: ${typeof widget_object.height === "string" ? widget_object.height : widget_object.height.toString() + "px"};`;
+						if (widget_object.width) img.style = `max-width: ${parseImageSize(widget_object.width)};`;
+						else if (widget_object.height) img.style = `max-height: ${parseImageSize(widget_object.height)};`;
 					}
 				}
 
@@ -208,6 +208,10 @@ export class ConfigClass {
 		}
 	}
 
+}
+
+function parseImageSize(dimension: string | number) {
+	return typeof dimension === "string" ? dimension : dimension.toString() + "px";
 }
 
 function getElementSuffix(element: NumberWidget | SliderWidget) {
