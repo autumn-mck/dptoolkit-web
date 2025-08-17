@@ -4,6 +4,7 @@ import { type DatapackStoreEvents, datapackStore } from "./datapackStore";
 import { getExportSettings } from "./page_interactions/settings";
 import { getStructureSets } from "./structureSet";
 import { showIntroIfNotShown } from "./page_interactions/introDialog";
+import { suggestAAAColorVariant } from "accessible-colors";
 
 const fileUploadElement = document.getElementById("input")!;
 fileUploadElement.addEventListener("change", onFileUploaded, { passive: true });
@@ -80,12 +81,16 @@ function getNameAndDescription(mcmeta: any): { name: string; description: string
 }
 
 function descriptionToDisplayable(description: Datapack["description"]): string {
-	if (Array.isArray(description))
+	if (Array.isArray(description)) {
+		const backgroundColor = document.getElementById("datapack-display")!.style.backgroundColor;
 		return description
-			.map((desc) => ({ text: sanitizeHtml(desc.text), color: desc.color }))
+			.map((desc) => ({
+				text: sanitizeHtml(desc.text),
+				color: suggestAAAColorVariant(desc.color, backgroundColor),
+			}))
 			.map((desc) => `<span style="color: ${desc.color}">${desc.text}</span>`)
 			.join("");
-	else return description;
+	} else return description;
 }
 
 function sanitizeHtml(unsafe: string): string {
