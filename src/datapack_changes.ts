@@ -185,7 +185,9 @@ export class DatapackModifier {
 
 	private wipeCache() {
 		this.changeCache = {};
+		this.changeQueue = [];
 		console.info("[DatapackModifier] Change cache wiped.")
+		console.info("[DatapackModifier] Change queue wiped.")
 	}
 
 	// #endregion

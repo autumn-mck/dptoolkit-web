@@ -124,10 +124,10 @@ function exportButtonClicked() {
 	const export_settings = getExportSettings();
 
 	datapackStore.getAll().forEach((datapack) => {
-		datapack.instancedConfig?.apply();
+		datapack.instancedConfig?.apply();  // this queues changes
 	});
 
-	DatapackModifierInstance.applyChanges(datapackStore.getAll(), export_settings).then(() => {
+	DatapackModifierInstance.applyChanges(datapackStore.getAll(), export_settings).then(() => {  // this applies changes and wipes changes
 		document.getElementById("progress-indicator")!.hidden = true;
 	});
 }
