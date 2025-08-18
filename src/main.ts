@@ -88,7 +88,7 @@ function descriptionToDisplayable(description: Datapack["description"]): string 
 			}))
 			.map((desc) => `<span style="color: ${desc.color}">${desc.text}</span>`)
 			.join("");
-	} else return description;
+	} else return description.replace("\n", "<br>");
 }
 
 function sanitizeHtml(unsafe: string): string {
@@ -124,10 +124,11 @@ function exportButtonClicked() {
 	const export_settings = getExportSettings();
 
 	datapackStore.getAll().forEach((datapack) => {
-		datapack.instancedConfig?.apply();  // this queues changes
+		datapack.instancedConfig?.apply(); // this queues changes
 	});
 
-	DatapackModifierInstance.applyChanges(datapackStore.getAll(), export_settings).then(() => {  // this applies changes and wipes changes
+	DatapackModifierInstance.applyChanges(datapackStore.getAll(), export_settings).then(() => {
+		// this applies changes and wipes changes
 		document.getElementById("progress-indicator")!.hidden = true;
 	});
 }
