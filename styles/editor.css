@@ -1,0 +1,74 @@
+.config-screen {
+	background-color: var(--background-above);
+	border: var(--border-width) solid var(--background-below);
+	width: 100%;
+	padding: 0em;
+	overflow-y: auto;
+	scrollbar-color: var(--background-above-above) var(--background-below);
+
+	img {
+		max-width: 100%;
+	}
+}
+
+/* CONFIG WIDGETS AND STUFF */
+.widget {
+	border: 0px;
+	border-color: var(--background-below);
+	border-style: solid;
+
+	display: flex;
+	justify-content: space-between;
+	justify-items: stretch;
+	align-items: center;
+
+	padding-left: 1em;
+	padding-right: 1em;
+	padding-bottom: 0.75em;
+	padding-top: 0.75em;
+
+	accent-color: var(--accent-color);
+	background-color: var(--background-above);
+}
+
+.config-screen > .widget-with-input:nth-of-type(odd) {
+	background-color: var(--background);
+}
+
+.widget-input {
+	width: 15vw;
+}
+
+.widget-value {
+	display: flex;
+	flex-direction: row;
+	gap: 1em;
+	align-items: center;
+	justify-content: flex-end;
+}
+
+.widget-number-input {
+	background-color: var(--background);
+	border-color: var(--background-below);
+	border: 1px;
+	color: inherit;
+	font-family: inherit;
+}
+
+.text-widget {
+	padding-top: 0.25em;
+	padding-bottom: 0.25em;
+	line-height: 1.25;
+}
+
+.heading-widget {
+	padding-top: 0.25em;
+	padding-bottom: 0.25em;
+	line-height: 1.25;
+}
+
+.title-widget {
+	padding-top: 0.25em;
+	padding-bottom: 0.25em;
+	line-height: 1.25;
+}
