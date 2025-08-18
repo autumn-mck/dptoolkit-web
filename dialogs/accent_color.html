@@ -5,10 +5,37 @@
 		<link rel="stylesheet" href="../styles-widgets.css" />
 	</head>
 	<body>
-		<dialog class="accent-color-dialog" open>
-			<h2>
-				wip
-			</h2>
+		<dialog open class="accent-color-dialog" style="max-width: 20em; position: relative;">
+			<h4>Select custom accent colour</h4>
+			<p>
+				<label for="accent-color-input">Hex colour value:</label>
+				<input type="text" placeholder="#beabee" id="accent-color-input" />
+				<span hidden id="accent-color-input-feedback">Input is not valid</span>
+			</p>
+			<script>
+				document.getElementById("accent-color-input").addEventListener("change", checkInput);
+				function checkInput() {
+					const inp = document.getElementById("accent-color-input").value;
+					const feedback = document.getElementById("accent-color-input-feedback");
+					if (!inp) {
+						feedback.hidden = true;
+					}
+					else {
+						feedback.hidden = false;
+						if (inp.charAt(0) != "#") {
+							feedback.innerText = "Value isn't a hex code";
+						}
+						else {
+							if (/^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/.test(inp)) {
+								feedback.innerText = "Value is a hex code :)";
+							}
+							else {
+								feedback.innerText = "Invalid hex code";
+							}
+						}
+					}
+				}
+			</script>
 		</dialog>
 	</body>
 </html>

@@ -49,6 +49,10 @@ a:visited {
 	color: var(--accent-color);
 }
 
+h4 {
+	margin: 0;
+}
+
 button,
 .upload-button {
 	--button-height: 6px;
