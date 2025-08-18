@@ -5,7 +5,7 @@ input[type="text"] {
 	background: var(--background-below);
 	border: var(--border-width) solid var(--background-above);
 	width: 100%;
-	transition: all cubic-bezier(0.075, 0.82, 0.165, 1) 0.25s;
+	transition: all var(--ease-out-circ) 0.25s;
 
 	/* text */
 	color: inherit;
@@ -67,7 +67,7 @@ input[type="text"] {
 		justify-items: stretch;
 		align-items: center;
 		gap: 1em;
-		transition: all cubic-bezier(0.075, 0.82, 0.165, 1) 0.5s;
+		transition: all var(--ease-out-circ) 0.5s;
 
 		> img {
 			width: 4em;
@@ -89,4 +89,3 @@ input[type="text"] {
 		}
 	}
 }
-
