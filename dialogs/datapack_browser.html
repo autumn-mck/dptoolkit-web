@@ -4,7 +4,6 @@
 		<link rel="stylesheet" href="../styles/main.css" />
 	</head>
 	<body>
-		<h2>Datapack browser:</h2>
 		<dialog class="datapack-browser" open>
 			<h2>
 				Add datapacks from Modrinth
@@ -20,21 +19,13 @@
 			</p>
 
 			<div class="pack-download-list">
-				<label class="list-item" for="id123">
-					<img src="https://cdn.modrinth.com/data/hl5OLM95/6846fa80f84d2baa0dd07f8ee65b6f10bf223a84_96.webp" />
-					<p><b><span class="item-name">Geophilic</span></b><br><span class="item-desc">A subtle-ish overhaul of vanilla Overworld biomes! Reworked!</span></p>
-					<input type="checkbox" id="id123" hidden />
-				</label>
-				<label class="list-item" for="id1234">
-					<img src="https://cdn.modrinth.com/data/HSfsxuTo/e036a417f857abd937326db5c131296ad88bad5b_96.webp" />
-					<p><b><span class="item-name">Explorify</span></b><br><span class="item-desc">A simplistic, vanilla-friendly collection of new structures.</span></p>
-					<input type="checkbox" id="id1234" hidden />
-				</label>
-				<label class="list-item" for="id1235">
-					<img src="https://cdn.modrinth.com/data/HSfsxuTo/e036a417f857abd937326db5c131296ad88bad5b_96.webp" />
-					<p><b><span class="item-name">Explorify</span></b><br><span class="item-desc">A simplistic, vanilla-friendly collection of new structures.</span></p>
-					<input type="checkbox" id="id1235" hidden />
-				</label>
+				<template id="PACK-DOWNLOAD-ITEM-TEMPLATE">
+					<label class="list-item" for="id123">
+						<img src="https://cdn.modrinth.com/data/hl5OLM95/6846fa80f84d2baa0dd07f8ee65b6f10bf223a84_96.webp" />
+						<p><b><span class="-name">Geophilic</span></b> by <span class="-author">bebebea_loste</span><br><span class="-desc">A subtle-ish overhaul of vanilla Overworld biomes! Reworked!</span></p>
+						<input type="checkbox" id="id123" hidden />
+					</label>
+				</template>
 			</div>
 
 			<br>
@@ -42,7 +33,6 @@
 			<button>
 				Download packs
 			</button>
-
 		</dialog>
 	</body>
 </html>
