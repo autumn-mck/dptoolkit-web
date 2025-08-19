@@ -1,0 +1,25 @@
+<div class="list">
+	<button type="button" class="collapsible-button" id="export-options-button">
+		{{> svg/settings}} Export settings
+	</button>
+	<div class="collapsible-content list">
+		<div class="simple-widget">
+			<label for="setting-archive-compression-level">Archive compression level</label>
+			<input
+				type="range"
+				id="setting-archive-compression-level"
+				min="0"
+				max="9"
+				step="1"
+				value="6" />
+		</div>
+		<div class="simple-widget">
+			<label for="setting-export-modified-only">Export modified files only (developer)</label>
+			<input type="checkbox" id="setting-export-modified-only" />
+		</div>
+		<div class="simple-widget">
+			<label for="setting-combine-packs">Combine packs (experimental!)</label>
+			<input type="checkbox" id="setting-combine-packs" />
+		</div>
+	</div>
+</div>
