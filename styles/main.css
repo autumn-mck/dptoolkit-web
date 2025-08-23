@@ -1,60 +1,20 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
 
-@import url("./elements.css");
+@import url("https://autumn-mck.github.io/flowblock/index.css");
+
 @import url("./editor.css");
 @import url("./sidebar.css");
 
-:root {
-	--background: #181825;
-	--background-below: #11111b;
-	--background-above: #1e1e2e;
-	--background-above-above: #363a4f;
-
-	--accent-color: #cba6f7;
-
-	--border-width: 2px;
-
-	--ease-out-quint: cubic-bezier(0.23, 1, 0.32, 1);
-	--ease-out-circ: cubic-bezier(0.075, 0.82, 0.165, 1);
-}
-
-*,
-*::before,
-*::after {
-	box-sizing: border-box;
-}
-
 html,
 body {
-	font-family: "Inter", sans-serif;
-	color: whitesmoke;
-	background-color: var(--background-below);
-
-	margin: 0;
-	padding: 0;
-	font-size: 16px;
-	line-height: 1.5;
-
 	width: 100%;
 	height: 100%;
 }
 
 body {
-	padding: 0;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-}
-
-a:link {
-	color: var(--accent-color);
-}
-a:visited {
-	color: var(--accent-color);
-}
-
-h4 {
-	margin: 0;
 }
 
 dialog {
@@ -157,16 +117,6 @@ div.header {
 		color: inherit;
 		text-decoration: none;
 	}
-}
-
-svg.icon {
-	display: inline-block;
-	vertical-align: middle;
-	fill: currentColor;
-	height: 1.25em;
-	position: relative;
-	top: -0.1em;
-	margin: 0 0.25em;
 }
 
 .pack-download-list {
